@@ -1,5 +1,5 @@
 # bash: Bashスクリプトによるサンプル・プログラム集
-Example codes for Bash Script Learning
+Code Examples for Bash Script Learning
 
 --------------------------------------------------------------------------------
 ## ライセンス(全般)
