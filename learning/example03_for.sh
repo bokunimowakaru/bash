@@ -4,7 +4,7 @@
 echo "Usage: "${0}" [name]..."          # プログラム名と使い方を表示する
 
 if [[ ${#} == 0 ]]; then                # 取得した引数が0個のとき
-    echo "Hello, World!"                # 文字列 Hello, World! を出力する
+    echo "Hello, world!"                # 文字列 Hello, world! を出力する
 else
     echo ${@}                           # 入力パラメータを表示する
     for name in ${@}; do                # 引数を変数nameへ代入
