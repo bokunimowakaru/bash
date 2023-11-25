@@ -1,4 +1,4 @@
 #!/bin/bash
 # Example 01 ようこそプログラミングの世界へ
 
-echo "Hello, World!"  # 文字列 Hello, World! を出力する
+echo "Hello, world!"  # 文字列 Hello, world! を出力する
