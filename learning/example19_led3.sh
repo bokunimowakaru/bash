@@ -17,17 +17,19 @@ if [[ ${#} == 0 ]]; then                # 取得した引数が0個のとき
 else                                    # 引数が存在するとき
     color=${1}                          # 入力パラメータから色を代入
 fi                                      # if文の終了
-if [[ ${color} -ge 0 && ${color} -le 7 ]]; then # 色が代入されていた時
-    for i in {0..2}; do                 # RGBの各LED色に対して
-        port=${ports[${i}]}             # ポート番号を取得
-        ${gpio_app} set ${port} op      # ポート番号portのGPIOを出力に設定
-        b=$(( (color >> i) & 1))        # 該当LEDへの出力値を変数bへ
-        echo "GPIO"${port}"="${b}       # ポート番号と変数bの値を表示
-        if [[ ${b} == 0 ]]; then        # b＝0のとき
-            ${gpio_app} set ${port} dl  # GPIOにLレベル(約0V)を出力
-        else                            # b≠0(b=1)のとき
-            ${gpio_app} set ${port} dh  # GPIOにHレベル(約3.3V)を出力
-        fi                              # if文の終了
-    done                                # ループの終了
+if [[ ${color} < 0 || ${color} > 7 ]]; then # 色の値が範囲外の時
+    echo "ERROR: out of range 0-7"      # エラー表示
+    exit 1                              # 終了
 fi                                      # if文の終了
+for i in {0..2}; do                     # RGBの各LED色に対して
+    port=${ports[${i}]}                 # ポート番号を取得
+    ${gpio_app} set ${port} op          # ポート番号portのGPIOを出力に設定
+    b=$(( (color >> i) & 1))            # 該当LEDへの出力値を変数bへ
+    echo "GPIO"${port}"="${b}           # ポート番号と変数bの値を表示
+    if [[ ${b} == 0 ]]; then            # b＝0のとき
+        ${gpio_app} set ${port} dl      # GPIOにLレベル(約0V)を出力
+    else                                # b≠0(b=1)のとき
+        ${gpio_app} set ${port} dh      # GPIOにHレベル(約3.3V)を出力
+    fi                                  # if文の終了
+done                                    # ループの終了
 exit                                    # プログラムの終了
