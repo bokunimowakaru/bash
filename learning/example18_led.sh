@@ -2,7 +2,7 @@
 # Example 18 Lチカ BASIC
 # 参考文献 raspi-gpio help
 
-echo "Usage: [echo names... |] "${0}    # プログラム名と使い方を表示する
+echo "Usage: "${0}                      # プログラム名と使い方を表示する
 gpio_app="raspi-gpio"                   # GPIO制御に標準のraspi-gpioを使用する
 
 port=4                                  # GPIO ポート番号
