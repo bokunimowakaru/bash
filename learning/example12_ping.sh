@@ -8,7 +8,8 @@
 #                 Copyright (c) 2016-2023 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 
-ip_my=`hostname -I|tr " " "\n"|grep -Eo '([0-9]*\.){3}[0-9]*'|grep -v "127.0."|head -1`
+ip_regexp="^([0-9]*\.){3}[0-9]*"
+ip_my=`hostname -I|tr " " "\n"|grep -Eo "${ip_regexp}"|grep -v "^127.0."|head -1`
 ip_c=`echo ${ip_my}|cut -d. -f1-3`
 wait="0.1"
 file_mac="maclist.txt"
