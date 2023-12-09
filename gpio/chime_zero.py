@@ -11,8 +11,8 @@
 ###############################################################################
 
 port = 4                                # チャイム用 GPIO ポート番号
-ping_f = 'E4'                           # チャイム音の周波数1
-pong_f = 'C4'                           # チャイム音の周波数2
+ping_f = 'C5'                           # チャイム音の周波数1
+pong_f = 'A4'                           # チャイム音の周波数2
 
 from gpiozero import TonalBuzzer        # GPIO Zero のTonalBuzzerを取得
 from gpiozero.tones import Tone         # GPIO Zero のToneを取得
