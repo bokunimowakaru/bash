@@ -5,7 +5,8 @@
 echo "Usage: "${0}" <color>"            # プログラム名と使い方を表示する
 echo "       echo <color>|"${0}         # 標準入力にも対応
 
-gpio_app="raspi-gpio"                   # GPIO制御に標準のraspi-gpioを使用する
+# gpio_app="raspi-gpio"                 # GPIO制御に標準のraspi-gpioを使用する
+gpio_app="../gpio/gpio_zero.sh"         # GPIO制御に標準のgpio_zero.shを使用する
 port_R=17                               # 赤色LED用 GPIO ポート番号
 port_G=27                               # 緑色LED用 GPIO ポート番号
 port_B=22                               # 青色LED用 GPIO ポート番号
@@ -26,7 +27,7 @@ for i in {0..2}; do                     # RGBの各LED色に対して
     port=${ports[${i}]}                 # ポート番号を取得
     ${gpio_app} set ${port} op          # ポート番号portのGPIOを出力に設定
     b=$(( (color >> i) & 1))            # 該当LEDへの出力値を変数bへ
-    echo "GPIO"${port}"="${b}           # ポート番号と変数bの値を表示
+    # echo "GPIO"${port}"="${b}         # ポート番号と変数bの値を表示
     ${gpio_app} set ${port} ${d[${b}]}  # GPIOに変数bの値を出力
 done                                    # ループの終了
 exit                                    # プログラムの終了

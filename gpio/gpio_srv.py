@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+## 注：Shebangを#!/usr/bin/env python3にするとpidofがスクリプトと認識しない
+
 ###############################################################################
 # GPIO 制御用 HTTPサーバ [GPIO Zero 版]
 #
@@ -40,11 +42,12 @@ def wsgi_app(environ, start_response):          # HTTPアクセス受信時の�
                 port=int(query[5:])
             except:
                 print('ERROR: query port')
-        if query.startswith('out='):
+        if query.startswith('out'):
             try:
                 b=int(query[4:])
             except:
-                b=0
+                b=-1
+                print('ERROR: query value')
             led = leds_dict.get(port)
             if led is None:
                 try:
@@ -52,7 +55,7 @@ def wsgi_app(environ, start_response):          # HTTPアクセス受信時の�
                     led = leds_dict.get(port)
                 except:
                     print('ERROR: GPIO LED, get port')
-            if led is not None:
+            if (led is not None) and (b >= 0):
                 led.value = b
                 res = 'GPIO'+str(port)+'=' + str(b)
             else:
