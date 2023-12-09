@@ -1,6 +1,19 @@
 #!/bin/bash
-# Example 18 Lチカ BASIC
-# 参考文献 raspi-gpio help
+###############################################################################
+# GPIO 制御用 HTTPクライアント
+#
+# raspi-gpioコマンドに似た方法で、GPIOを制御します
+#
+#   gpio_zero set 4 dh # ポート4をHighレベル(楽3.3V)に設定します。
+#   gpio_zero set 4 dL # ポート4をLowレベル(約0V)に設定します。
+#   gpio_zero get 4    # ポート4の状態を応答します。
+#
+# 参考文献：
+# https://gpiozero.readthedocs.io/
+# raspi-gpio help
+#
+#                   Copyright (c) 2023-2024 Wataru KUNINO https://bokunimo.net/
+###############################################################################
 
 if [[ ${#} == 0 ]]; then                # 取得した引数が0個のとき
     echo "Usage: "${0}" <get|set> <port> [value]" # プログラム名と使い方を表示
