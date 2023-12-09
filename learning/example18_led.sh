@@ -5,6 +5,9 @@
 echo "Usage: "${0}                      # プログラム名と使い方を表示する
 # gpio_app="raspi-gpio"                 # GPIO制御に標準のraspi-gpioを使用する
 gpio_app="../gpio/gpio_zero.sh"         # GPIO制御に標準のgpio_zero.shを使用する
+if [[ ${gpio_app} = "../gpio/gpio_zero.sh" ]]; then
+   trap "${gpio_app} quit" EXIT         # 終了時にGPIO用のHTTPサーバを停止する
+fi
 
 port=4                                  # GPIO ポート番号
 b=0                                     # GPIO 出力値

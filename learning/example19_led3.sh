@@ -30,4 +30,8 @@ for i in {0..2}; do                     # RGBの各LED色に対して
     # echo "GPIO"${port}"="${b}         # ポート番号と変数bの値を表示
     ${gpio_app} set ${port} ${d[${b}]}  # GPIOに変数bの値を出力
 done                                    # ループの終了
+
+if [[ ${gpio_app} = "../gpio/gpio_zero.sh" ]]; then
+   trap "${gpio_app} quit" EXIT         # 終了時にGPIO用のHTTPサーバを停止する
+fi
 exit                                    # プログラムの終了

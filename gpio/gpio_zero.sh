@@ -9,6 +9,7 @@ if [[ ${#} == 0 ]]; then                # 取得した引数が0個のとき
     echo "       "${0}" get 4    # Read Digital Value"
     echo "       "${0}" set 4 op # Digital Output Mode"
     echo "       "${0}" set 4 ip # same as 'get 4'"
+    echo "       "${0}" quit     # Stop HTTP Server"
 fi
 
 dir=`cd $(dirname ${0}) && pwd`             # スクリプトの保存場所を取得
@@ -36,6 +37,12 @@ if [[ ${#} -ge 2 ]]; then
 fi
 if [[ ${#} -ge 3 ]]; then
     val=${3}
+fi
+if [[ ${com} = "quit" ]]; then
+    kill ${pid_srv}
+    echo
+    echo "stopped http server"
+    exit 0
 fi
 if [[ ${val} = "ip" ]]; then
     val="get"
@@ -69,6 +76,7 @@ Usage: ./gpio_zero.sh <get|set> <port> [value]
        ./gpio_zero.sh get 4    # Read Digital Value
        ./gpio_zero.sh set 4 op # Digital Output Mode
        ./gpio_zero.sh set 4 ip # same as 'get 4'
+       ./gpio_zero.sh quit     # Stop HTTP Server
 started http server : /home/pi/bash/gpio/gpio_srv.py &>> /home/pi/bash/gpio/gpio_srv.log
 
 pi@raspberrypi:~/bash/gpio $ ./gpio_zero.sh set 4 dh
