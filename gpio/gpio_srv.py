@@ -32,7 +32,7 @@ def wsgi_app(environ, start_response):          # HTTPアクセス受信時の�
     if not queries.isprintable() or len(queries) > 256 : # クエリの条件確認
         start_response('404 Not Found',[])      # 404エラー応答を設定
         return ['404 Not Found'.encode()]       # 応答メッセージ(404)を返却
-    res = 'GPIO'+str(port)                      # 応答文を作成
+    res = 'GPIO '+str(port)+': NA'              # 応答文を作成
     queries = queries.lower().split('&')        # クエリを項目ごとに分解
     print('\n---- REQUESTED ---- ',end='')
     print('Queries:',queries)                   # クエリ確認用
@@ -40,6 +40,7 @@ def wsgi_app(environ, start_response):          # HTTPアクセス受信時の�
         if query.startswith('port='):
             try:
                 port=int(query[5:])
+                res = 'GPIO '+str(port)+': NA'  # 応答文を作成
             except:
                 print('ERROR: query port')
         if query.startswith('out'):
@@ -57,35 +58,29 @@ def wsgi_app(environ, start_response):          # HTTPアクセス受信時の�
                     print('ERROR: GPIO LED, get port')
             if (led is not None) and (b >= 0):
                 led.value = b
-                res = 'GPIO'+str(port)+'=' + str(b)
-            else:
-                res = 'GPIO'+str(port)+'=NA'
+                res = 'GPIO '+str(port)+': level=' + str(b)
         if query.startswith('in'):
             btn = btns_dict.get(port)
             if btn is None:
                 btn = leds_dict.get(port)
             if btn is None:
                 try:
-                    btns_dict[port] = Button(port)
+                    btns_dict[port] = Button(port, pull_up=True)
                     btn = btns_dict.get(port)
                 except:
                     print('ERROR: GPIO Button, get port')
             if btn is not None:
-                res = 'GPIO'+str(port)+'=' + str(btn.value)
-            else:
-                res = 'GPIO'+str(port)+'=NA'
+                res = 'GPIO '+str(port)+': level=' + str(btn.value)
         if query == 'close':
             led = leds_dict.get(port)
             if led is not None:
                 led.close()
                 del leds_dict[port]
-                res = 'GPIO'+str(port)+'=NA'
             else:
                 btn = btns_dict.get(port)
                 if btn is not None:
                     btn.close()
                     del btns_dict[port]
-                    res = 'GPIO'+str(port)+'=NA'
     print(res)                                  # 応答メッセージを表示
     res = (res + '\r\n').encode('utf-8')        # 改行コード付与とバイト列へ変換
     start_response('200 OK', [('Content-type', 'text/plain; charset=utf-8')])
@@ -117,18 +112,18 @@ e.g. http://127.0.0.1:8080/?port=4&out=1
      http://127.0.0.1:8080/?port=4&close
 
 ---- REQUESTED ---- Queries: ['port=4', 'out=1']
-GPIO4=1
+GPIO 4: level=1
 192.168.0.6 - - [09/Dec/2023 03:11:36] "GET /?port=4&out=1 HTTP/1.1" 200 9
 
 ---- REQUESTED ---- Queries: ['port=4', 'out=0']
-GPIO4=0
+GPIO 4: level=0
 192.168.0.6 - - [09/Dec/2023 03:11:48] "GET /?port=4&out=0 HTTP/1.1" 200 9
 
 ---- REQUESTED ---- Queries: ['port=4', 'in']
-GPIO4=0
+GPIO 4: level=0
 192.168.0.6 - - [09/Dec/2023 03:11:55] "GET /?port=4&in HTTP/1.1" 200 9
 
 ---- REQUESTED ---- Queries: ['port=4', 'close']
-GPIO4=NA
+GPIO 4: NA
 192.168.0.6 - - [09/Dec/2023 03:12:01] "GET /?port=4&close HTTP/1.1" 200 10
 '''

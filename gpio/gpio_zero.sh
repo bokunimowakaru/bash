@@ -29,7 +29,7 @@ dir=`cd $(dirname ${0}) && pwd`             # スクリプトの保存場所を�
 gpio_srv=${dir}"/gpio_srv.py"               # GPIO制御用HTTPサーバの場所を取得
 pid_srv=`pidof -x gpio_srv.py`              # 実行状態を取得
 if [[ ! ${pid_srv} ]]; then                 # 実行されていないとき
-    ${gpio_srv} &> ${dir}"/gpio_srv.log" &  # サーバを起動
+    ${gpio_srv} &>> ${dir}"/gpio_srv.log" & # サーバを起動
     sleep 1                                 # 起動待ち
     pid_srv=`pidof -x gpio_srv.py`          # 実行状態を取得
     echo "started http server : ${gpio_srv} &> ${dir}/gpio_srv.log" # 開始表示
@@ -58,12 +58,12 @@ if [[ ${com} = "quit" ]]; then
     exit 0
 fi
 if [[ ${val} = "ip" ]]; then
-    val="get"
+    com="get"
 fi
-if [[ ${#} -ge 2 && ${1} = "get" ]]; then
+if [[ ${com} = "get" ]]; then
     res=`curl -s "localhost:8080/?port="${port}"&in"`
 fi
-if [[ ${#} -ge 3 && ${1} = "set" ]]; then
+if [[ ${com} = "set" ]]; then
     b=-1
     if [[ ${val} = ${d[0]} ]]; then
         b=0
