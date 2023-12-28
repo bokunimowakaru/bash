@@ -4,24 +4,25 @@
 ###############################################################################
 # GPIO 制御用 HTTPサーバ [GPIO Zero 版]
 #
+# 最新版：
+# https://bokunimo.net/git/bash/blob/master/gpio/gpio_srv.py
+#
 # 参考文献：
 # https://gpiozero.readthedocs.io/
 #
 #                   Copyright (c) 2023-2024 Wataru KUNINO https://bokunimo.net/
 ###############################################################################
 
-from gpiozero import Button
-from gpiozero import LED
-from wsgiref.simple_server import make_server
+from gpiozero import Button,LED                 # GPIO ZeroのI/Oモジュール取得
+from wsgiref.simple_server import make_server   # HTTPサーバ用モジュールの取得
+from urllib.parse import parse_qs               # クエリ・ストリングの解析用
 from time import sleep                          # スリープ実行モジュールの取得
 from sys import argv                            # 本プログラムの引数argvを取得
 import threading                                # スレッド用ライブラリの取得
 
-port = 4
-leds_dict = dict()
-btns_dict = dict()
-
-print(argv[0])                                  # プログラム名を表示する
+port = 4                                        # GPIOポート番号の初期値
+leds_dict = dict()                              # GPIO出力用インスタンス
+btns_dict = dict()                              # GPIO入力用インスタンス
 
 def wsgi_app(environ, start_response):          # HTTPアクセス受信時の処理
     global port                                 # 変数portを関数外から取得
@@ -33,59 +34,68 @@ def wsgi_app(environ, start_response):          # HTTPアクセス受信時の�
         start_response('404 Not Found',[])      # 404エラー応答を設定
         return ['404 Not Found'.encode()]       # 応答メッセージ(404)を返却
     res = 'GPIO '+str(port)+': NA'              # 応答文を作成
-    queries = queries.lower().split('&')        # クエリを項目ごとに分解
+    queries = environ.get('QUERY_STRING')       # 受信クエリを取得
     print('\n---- REQUESTED ---- ',end='')
-    print('Queries:',queries)                   # クエリ確認用
-    for query in queries:
-        if query.startswith('port='):
+    queries_s = queries.lower().split('&')      # クエリを項目ごとに分解
+    queries_dict = parse_qs(queries)            # 受信クエリを辞書型で保持
+    print('Queries:',queries_s)                 # クエリ確認用
+
+    # GPIO Port (クエリに「port=n」があったときにポート番号をnに設定)
+    if 'port' in queries_dict:
+        port_s = queries_dict.get('port')[0]
+        try:
+            port=int(port_s)
+            res = 'GPIO '+str(port)+': NA'  # 応答文を作成
+        except:
+            print('ERROR: query port')
+    # GPIO OUTPUT (クエリに「out=b」があったときに値bをGPIO出力)
+    if 'out' in queries_dict:
+        val_s = queries_dict.get('out')[0]
+        try:
+            b=int(val_s)
+        except:
+            b=-1
+            print('ERROR: query value')
+        led = leds_dict.get(port)
+        if led is None:
             try:
-                port=int(query[5:])
-                res = 'GPIO '+str(port)+': NA'  # 応答文を作成
+                leds_dict[port] = LED(port)
+                led = leds_dict.get(port)
             except:
-                print('ERROR: query port')
-        if query.startswith('out'):
+                print('ERROR: GPIO LED, get port')
+        if (led is not None) and (b >= 0):
+            led.value = b
+            res = 'GPIO '+str(port)+': level=' + str(b)
+    # GPIO INPUT (クエリに「in」があったときにGPIO入力値を応答)
+    if 'in' in queries_s:
+        btn = btns_dict.get(port)
+        if btn is None:
+            btn = leds_dict.get(port)
+        if btn is None:
             try:
-                b=int(query[4:])
-            except:
-                b=-1
-                print('ERROR: query value')
-            led = leds_dict.get(port)
-            if led is None:
-                try:
-                    leds_dict[port] = LED(port)
-                    led = leds_dict.get(port)
-                except:
-                    print('ERROR: GPIO LED, get port')
-            if (led is not None) and (b >= 0):
-                led.value = b
-                res = 'GPIO '+str(port)+': level=' + str(b)
-        if query.startswith('in'):
-            btn = btns_dict.get(port)
-            if btn is None:
-                btn = leds_dict.get(port)
-            if btn is None:
-                try:
-                    btns_dict[port] = Button(port, pull_up=True)
-                    btn = btns_dict.get(port)
-                except:
-                    print('ERROR: GPIO Button, get port')
-            if btn is not None:
-                res = 'GPIO '+str(port)+': level=' + str(btn.value)
-        if query == 'close':
-            led = leds_dict.get(port)
-            if led is not None:
-                led.close()
-                del leds_dict[port]
-            else:
+                btns_dict[port] = Button(port, pull_up=True)
                 btn = btns_dict.get(port)
-                if btn is not None:
-                    btn.close()
-                    del btns_dict[port]
+            except:
+                print('ERROR: GPIO Button, get port')
+        if btn is not None:
+            res = 'GPIO '+str(port)+': level=' + ('0' if btn.value else '1')
+    # GPIO Close (該当するGPIOを解放)
+    if 'close' in queries_s:
+        led = leds_dict.get(port)
+        if led is not None:
+            led.close()
+            del leds_dict[port]
+        else:
+            btn = btns_dict.get(port)
+            if btn is not None:
+                btn.close()
+                del btns_dict[port]
     print(res)                                  # 応答メッセージを表示
     res = (res + '\r\n').encode('utf-8')        # 改行コード付与とバイト列へ変換
     start_response('200 OK', [('Content-type', 'text/plain; charset=utf-8')])
     return [res]                                # 応答メッセージを返却
 
+print(argv[0])                                  # プログラム名を表示する
 try:
     httpd = make_server('', 8080, wsgi_app)     # ポート8080でHTTPサーバ実体化
     print("HTTP port 8080")                     # 起動ポート番号の表示
