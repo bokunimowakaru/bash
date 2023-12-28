@@ -18,7 +18,11 @@
 #                   Copyright (c) 2023-2024 Wataru KUNINO https://bokunimo.net/
 ###############################################################################
 
-if [[ ${#} == 0 ]]; then                # 取得した引数が0個のとき
+url_s="localhost:8080"                      # 宛先アドレス
+gpio_srv_app="gpio_srv.py"                  # GPIO制御サーバのプログラム名
+gpio_srv_log="gpio_srv.log"                 # ログ出力用のファイル名
+
+if [[ ${#} == 0 ]]; then                    # 取得した引数が0個のとき
     echo "Usage: "${0}" <get|set> <port> [value]" # プログラム名と使い方を表示
     echo "       "${0}" set 4 dh # Digital High Output"
     echo "       "${0}" set 4 dl # Digital Low Output"
@@ -29,14 +33,14 @@ if [[ ${#} == 0 ]]; then                # 取得した引数が0個のとき
 fi
 
 dir=`cd $(dirname ${0}) && pwd`             # スクリプトの保存場所を取得
-gpio_srv=${dir}"/gpio_srv.py"               # GPIO制御用HTTPサーバの場所を取得
-pid_srv=`pidof -x gpio_srv.py`              # 実行状態を取得
+gpio_srv=${dir}"/"${gpio_srv_app}           # GPIO制御用HTTPサーバの場所を取得
+pid_srv=`pidof -x ${gpio_srv_app}`          # 実行状態を取得
 if [[ ! ${pid_srv} ]]; then                 # 実行されていないとき
-    ${gpio_srv} &>> ${dir}"/gpio_srv.log" & # サーバを起動
+    ${gpio_srv} &>> ${dir}"/"${gpio_srv_log} & # サーバを起動
     sleep 1                                 # 起動待ち
-    pid_srv=`pidof -x gpio_srv.py`          # 実行状態を取得
-    echo "started http server : ${gpio_srv} &>> ${dir}/gpio_srv.log" # 開始表示
-    echo "PID of gpio_srv.py = "${pid_srv}  # PIDを表示
+    pid_srv=`pidof -x ${gpio_srv_app}`      # 実行状態を取得
+    echo "started http server : ${gpio_srv} &>> ${dir}/${gpio_srv_log}" # 開始表示
+    echo "PID of ${gpio_srv_app} = "${pid_srv}  # PIDを表示
 fi
 
 com="none"                                  # コマンド名 none/get/set
@@ -64,7 +68,7 @@ if [[ ${val} = "ip" ]]; then
     com="get"
 fi
 if [[ ${com} = "get" ]]; then
-    res=`curl -s "localhost:8080/?port="${port}"&in"`
+    res=`curl -s ${url_s}"/?port="${port}"&in"`
 fi
 if [[ ${com} = "set" ]]; then
     b=-1
@@ -74,9 +78,9 @@ if [[ ${com} = "set" ]]; then
         b=1
     fi
     if [[ ${b} -ge 0 ]]; then
-        res=`curl -s "localhost:8080/?port="${port}"&out="${b}`
+        res=`curl -s ${url_s}"/?port="${port}"&out="${b}`
     else
-        res=`curl -s "localhost:8080/?port="${port}"&out"`
+        res=`curl -s ${url_s}"/?port="${port}"&out"`
     fi
 fi
 echo ${res}

@@ -71,14 +71,16 @@ def wsgi_app(environ, start_response):          # HTTPアクセス受信時の�
         btn = btns_dict.get(port)
         if btn is None:
             btn = leds_dict.get(port)
+            if btn is not None:
+                res = 'GPIO '+str(port)+': level=' + ('0' if not btn.value else '1')
         if btn is None:
             try:
                 btns_dict[port] = Button(port, pull_up=True)
                 btn = btns_dict.get(port)
             except:
                 print('ERROR: GPIO Button, get port')
-        if btn is not None:
-            res = 'GPIO '+str(port)+': level=' + ('0' if btn.value else '1')
+            if btn is not None:
+                res = 'GPIO '+str(port)+': level=' + ('0' if btn.value else '1')
     # GPIO Close (該当するGPIOを解放)
     if 'close' in queries_s:
         led = leds_dict.get(port)
