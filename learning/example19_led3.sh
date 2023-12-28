@@ -2,8 +2,10 @@
 # Example 19 カラー Lチカ
 # 参考文献 raspi-gpio help
 
-gpio_app="../gpio/gpio_zero.sh"         # GPIO制御に標準のgpio_zero.shを使用する
-# gpio_app="raspi-gpio"                 # GPIO制御に標準のraspi-gpioを使用する
+gpio_app="pinctrl"                      # GPIO制御に新しいpinctrlを使用する
+# gpio_app="../gpio/gpio_zero.sh"       # GPIO制御に標準のgpio_zero.shを使用する
+# gpio_app="raspi-gpio"                 # GPIO制御に従来のraspi-gpioを使用する
+
 port_R=17                               # 赤色LED用 GPIO ポート番号
 port_G=27                               # 緑色LED用 GPIO ポート番号
 port_B=22                               # 青色LED用 GPIO ポート番号

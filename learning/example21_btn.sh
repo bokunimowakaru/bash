@@ -13,9 +13,11 @@ url_s="https://notify-api.line.me/api/notify"            # LINE Notify のURL
     # 'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'
 udp_port=1024                                           # CSVxUDP ポート番号
 device="btn_s_1"                                        # CSVxUDP デバイス名
-gpio_app="../gpio/gpio_zero.sh"                         # GPIO制御プログラム
-# gpio_app="raspi-gpio"
+
 udp_app="../tools/udp_sender.py"                        # UDP送信プログラム
+gpio_app="pinctrl"                      # GPIO制御に新しいpinctrlを使用する
+# gpio_app="../gpio/gpio_zero.sh"       # GPIO制御に標準のgpio_zero.shを使用する
+# gpio_app="raspi-gpio"                 # GPIO制御に従来のraspi-gpioを使用する
 if [[ ${gpio_app} = "../gpio/gpio_zero.sh" ]]; then
    trap "${gpio_app} quit" EXIT         # 終了時にGPIO用のHTTPサーバを停止する
 fi
