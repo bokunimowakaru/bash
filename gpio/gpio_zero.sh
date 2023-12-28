@@ -8,6 +8,9 @@
 #   gpio_zero set 4 dL # ポート4をLowレベル(約0V)に設定します。
 #   gpio_zero get 4    # ポート4の状態を応答します。
 #
+# 最新版：
+# https://bokunimo.net/git/bash/blob/master/gpio/gpio_zero.sh
+#
 # 参考文献：
 # https://gpiozero.readthedocs.io/
 # raspi-gpio help
