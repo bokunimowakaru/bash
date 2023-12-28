@@ -35,7 +35,7 @@ if [[ ! ${pid_srv} ]]; then                 # 実行されていないとき
     ${gpio_srv} &>> ${dir}"/gpio_srv.log" & # サーバを起動
     sleep 1                                 # 起動待ち
     pid_srv=`pidof -x gpio_srv.py`          # 実行状態を取得
-    echo "started http server : ${gpio_srv} &> ${dir}/gpio_srv.log" # 開始表示
+    echo "started http server : ${gpio_srv} &>> ${dir}/gpio_srv.log" # 開始表示
     echo "PID of gpio_srv.py = "${pid_srv}  # PIDを表示
 fi
 
