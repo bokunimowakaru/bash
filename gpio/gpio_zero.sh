@@ -35,7 +35,7 @@ fi
 dir=`cd $(dirname ${0}) && pwd`             # スクリプトの保存場所を取得
 gpio_srv=${dir}"/"${gpio_srv_app}           # GPIO制御用HTTPサーバの場所を取得
 pid_srv=`pidof -x ${gpio_srv_app}`          # 実行状態を取得
-if [[ ! ${pid_srv} ]]; then                 # 実行されていないとき
+if [[ ! ${pid_srv} && ${url_s:0:9} == "localhost" ]]; then # 実行されていないとき
     ${gpio_srv} &>> ${dir}"/"${gpio_srv_log} & # サーバを起動
     sleep 1                                 # 起動待ち
     pid_srv=`pidof -x ${gpio_srv_app}`      # 実行状態を取得
