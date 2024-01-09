@@ -29,7 +29,7 @@
 #                      Copyright (c) 2023 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 
-file_log="ssh_mon.log"
+file_log="/home/pi/ssh_mon.log"
 line_token="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # LINEで取得したTOKEN
 url_s="https://notify-api.line.me/api/notify"            # LINE Notify のURL
     # 'Authorization':'Bearer ' + line_token
