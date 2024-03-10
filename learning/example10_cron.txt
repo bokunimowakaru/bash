@@ -1,1 +1,2 @@
-59 23 * * * ~/bash/learning/example10_backup.sh ~/bash/learning/*
+#分 時 日 月 曜日	command
+ 59 23  *  *    *	~/bash/learning/example10_backup.sh ~/bash/learning/*
