@@ -1,0 +1,1 @@
+59 23 * * * ~/bash/learning/example10_backup.sh ~/bash/learning/*
