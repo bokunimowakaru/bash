@@ -8,13 +8,13 @@
 #
 #   crontabに以下を追加すれば、毎日0:10に、自動実行することが出来ます。
 #   # m h  dom mon dow   command
-#   10 0 * * * ~/bash/learning/example10_backup.sh ~/bash/learning/*.sh
+#   10 0 * * * ~/bash/learning/example10_backup.sh ~/bash/learning/*
 # 
 #                   Copyright (c) 2016-2023 Wataru KUNINO https://bokunimo.net/
 ###############################################################################
 
 echo "Usage: "${0}" [filename]..."
-backup_from=~/bash/learning/*.sh
+backup_from=~/bash/learning/*
 backup_to=~/bash/backup
 
 # バックアップ元のファイルを変数backup_fromに保持する
@@ -24,7 +24,7 @@ fi
 echo "backup_from : "${backup_from}
 
 # バックアップ先のディレクトリをbackup_toに保持する
-backup_usb=`df|grep media|grep /dev/|grep -v ootfs|tail -1|awk '{print $6}'`
+backup_usb=`df|grep media|grep /dev/|grep -v /.ootfs$|grep -v /.oot$|tail -1|awk '{print $6}'`
 if [[ ${backup_usb} != "" ]]; then
     backup_to=${backup_usb}"/backup"
 fi
