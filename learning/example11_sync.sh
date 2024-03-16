@@ -17,7 +17,7 @@ fi
 echo "sync_from : "${sync_from}
 
 # 同期先のディレクトリをsync_toに保持する
-sync_usb=`df|grep media|grep /dev/|grep -v ootfs|tail -1|awk '{print $6}'`
+sync_usb=`df|grep media|grep /dev/|grep -v /.ootfs$|grep -v /.oot$|tail -1|awk '{print $6}'`
 if [[ ${sync_usb} != "" ]]; then
     sync_to=${sync_usb}"/sync"
 fi
