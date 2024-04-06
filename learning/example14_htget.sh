@@ -3,7 +3,7 @@
 
 # インターネットから情報を取得する
 url="https://bokunimo.net/git/bash/raw/master/status.txt"
-data=`curl -L https://bokunimo.net/git/bash/raw/master/status.txt`
+data=`curl -L ${url}`
 
 # 項目ごとに抽出し、それぞれの結果を配列変数に保持する
 title=`echo "${data}"|grep "title"`
