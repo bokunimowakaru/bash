@@ -29,7 +29,7 @@ while true;do                                           # 永久に繰り返し
     json="{\"writeKey\":\"${writeKey}\",${data}}"       # JSON用のデータを生成
     curl -s "${url}/api/v2/channels/${channelId}/data"\
          -X POST -H "Content-Type: application/json" -d ${json} # Ambient送信
-    echo ${device}","${int}.${dec}|${udp_app} ${udp_port}  # CSVxUDP送信
+    # echo ${device}","${int}.${dec}|${udp_app} ${udp_port}  # CSVxUDP送信
     sleep ${interval}                                   # 測定間隔の待ち時間
 done                                                    # 繰り返し
 
