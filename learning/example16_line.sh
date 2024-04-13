@@ -27,7 +27,7 @@ line_notify() {                             # メッセージ送信用の関数
     message="${1}(${time})"                 # 引き数と日時を連結する
     res=`curl -s -m3 -XPOST\
          -H "Authorization:Bearer ${line_token}"\
-         -d "message=${1}(${time})"\
+         -d "message=${message}"\
          ${url_s}`                          # LINEにメッセージを送信する
     if [[ ${res} ]]; then                   # 応答があった場合
         echo ${message}" -> "${res}         # 送信メッセージと応答を表示する
