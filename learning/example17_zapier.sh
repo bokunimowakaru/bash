@@ -5,9 +5,10 @@
 #                                         Copyright (c) 2017-2024 Wataru KUNINO
 ###############################################################################
 
-# IFTTTのKeyを(https://ifttt.com/maker_webhooks)から取得し、変数keyへ代入する
+# ZapierのユーザIDとWebhook用のトークンを下記に記入する
 user_id="xxxxxxxx" # ZapierのユーザID
 zap_id="xxxxxxx"   # Webhook用のトークン
+
 url="https://hooks.zapier.com/hooks/catch/"${user_id}"/"${zap_id}  # URL
 event_name="notify"
 
