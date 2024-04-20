@@ -3,7 +3,7 @@
 # 参考文献 raspi-gpio help
 
 gpio_app="pinctrl"                      # GPIO制御にpinctrlを使用する
-# gpio_app="../gpio/gpio_zero.sh"       # GPIO制御に標準のgpio_zero.shを使用する
+# gpio_app="../gpio/gpio_zero.sh"       # GPIO制御にgpio_zero.shを使用する
 # gpio_app="raspi-gpio"                 # GPIO制御に従来のraspi-gpioを使用する
 if [[ ${gpio_app} = "../gpio/gpio_zero.sh" ]]; then
    trap "${gpio_app} quit" EXIT         # 終了時にGPIO用のHTTPサーバを停止する
