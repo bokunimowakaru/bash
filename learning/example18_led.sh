@@ -2,7 +2,7 @@
 # Example 18 Lチカ BASIC
 # 参考文献 raspi-gpio help
 
-gpio_app="pinctrl"                      # GPIO制御に新しいpinctrlを使用する
+gpio_app="pinctrl"                      # GPIO制御にpinctrlを使用する
 # gpio_app="../gpio/gpio_zero.sh"       # GPIO制御に標準のgpio_zero.shを使用する
 # gpio_app="raspi-gpio"                 # GPIO制御に従来のraspi-gpioを使用する
 if [[ ${gpio_app} = "../gpio/gpio_zero.sh" ]]; then
