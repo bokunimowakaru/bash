@@ -13,7 +13,7 @@
 #   実行するとLCDに文字列を表示します。
 
 LCD_WIDTH=8                     # LCDの桁数 AQM0802は8桁、AQM1602は16桁
-LCD_IO=4                        # LCD用電源用IOポート番号を指定する
+LCD_IO=4                        # LCDリセット用IOポート番号を設定する
 LOG="/dev/stdout"               # ログファイル名(/dev/stdoutでコンソール表示)
 
 gpio_app="pinctrl"              # GPIO制御にpinctrlを使用する for Raspberry Pi 5
