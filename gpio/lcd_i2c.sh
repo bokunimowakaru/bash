@@ -8,6 +8,7 @@
 ################################################################################
 # 元ソース：
 # https://github.com/bokunimowakaru/raspi_lcd/blob/master/example.sh
+# https://github.com/bokunimowakaru/raspi_lcd/blob/master/raspi_i2c.c
 ################################################################################
 # 解説：
 #   実行するとLCDに文字列を表示します。

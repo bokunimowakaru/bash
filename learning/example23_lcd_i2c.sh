@@ -4,7 +4,7 @@
 ################################################################################
 # 元ソース：
 # https://github.com/bokunimowakaru/raspi_lcd/blob/master/example_Pi5.sh
-# https://github.com/bokunimowakaru/raspi_lcd/blob/master/example_cpu.sh
+# https://github.com/bokunimowakaru/raspi_lcd/blob/master/raspi_i2c.c
 # https://github.com/bokunimowakaru/raspi_lcd/blob/master/example.sh
 ################################################################################
 
