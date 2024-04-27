@@ -19,15 +19,8 @@
 #   DAC PCM5102A で Raspberry Pi オーディオ
 #   https://bokunimo.net/blog/raspberry-pi/3123/
 #
-# 要件：
-#   本ソフトのインストール($よりも後ろのコマンドを入力)：
-#   $ cd ⏎
-#   $ sudo apt install alsa-utils ⏎ (LITE版OS使用時)
+# ffmpegのインストール：
 #   $ sudo apt install ffmpeg ⏎
-#   $ sudo apt install git ⏎ (LITE版OS使用時)
-#   (音が出ないときは、aplay -l でカード番号とデバイス番号を確認し、設定する)
-#   設定ファイル audio/radio/pi/radio.sh
-#       export AUDIODEV="hw:1,0"
 
 # GPIO設定部
 LCD_IO=4                        # LCDリセット用IOポート番号を設定する
