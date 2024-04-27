@@ -101,6 +101,7 @@ while true; do                  # 永久ループ
         if [[ ${ch} -gt ${urln} ]]; then    # チャンネル数を超えていた時
             ch=1                            # チャンネル1に設定する
         fi
+        lcd ${urls[$(( ch - 1 ))]}          # urlsに登録したチャンネル名を表示
         radio ${ch}                         # 関数 radioを呼び出し
         trap "kill `pidof ffplay` &> /dev/null" EXIT # 終了時にffplayを終了する
         sleep 1                             # 0.1秒の待ち時間処理
