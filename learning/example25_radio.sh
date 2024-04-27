@@ -36,10 +36,8 @@ BTN_IO=26                       # タクトスイッチのGPIO ポート番号
 # インターネットラジオ局の登録
 urls=(
     "181.fm__Power181 http://listen.livestreamingservice.com/181-power_64k.aac"
-    "181.fm__The_Beat http://listen.livestreamingservice.com/181-beat_64k.aac"
     "1.FM_AmsteTrance http://185.33.21.111:80/atr_128"
     "NHK-FM__(Osaka)_ https://radio-stream.nhk.jp/hls/live/2023509/nhkradirubkfm/master.m3u8"
-    "NHK-N1__(Osaka)_ https://radio-stream.nhk.jp/hls/live/2023508/nhkradirubkr1/master.m3u8"
 )
 urln=${#urls[*]}
 
