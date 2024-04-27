@@ -29,8 +29,8 @@ BTN_IO=26                       # タクトスイッチのGPIO ポート番号
 # インターネットラジオ局の登録
 urls=(
     "181.fm__Power181 http://listen.livestreamingservice.com/181-power_64k.aac"
+    "181.fm__The_Beat http://listen.livestreamingservice.com/181-beat_64k.aac"
     "1.FM_AmsteTrance http://185.33.21.111:80/atr_128"
-    "NHK-FM__(Osaka)_ https://radio-stream.nhk.jp/hls/live/2023509/nhkradirubkfm/master.m3u8"
 )
 urln=${#urls[*]}
 
@@ -62,12 +62,13 @@ lcd (){
     i2cset -y 1 0x3e 0x40 ${hex2} 32 32 32 32 32 32 32 32 i
 }
 
-# チャンネル名（icy-name）の表示実行部
+# チャンネル名（icy-description）の表示実行部
 if [[ ${1} == "lcd_out" ]]; then
+    echo `date` "Started Subprocess lcd_out"
     while read s; do
-        s=`echo ${s}|grep "icy-name"|cut -d" " -f3-`
+        s=`echo ${s}|grep "icy-description"|cut -d" " -f3-`
         if [[ -n ${s} ]]; then
-            echo `date` "icy-name =" ${s}
+            echo `date` "icy-description =" ${s}
             lcd ${s}
         fi
     done
