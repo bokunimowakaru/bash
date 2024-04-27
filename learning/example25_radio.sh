@@ -10,6 +10,7 @@
 
 # 解説：
 #   実行するとインターネットラジオを再生します。
+#   GPIO 26に接続したボタンを押すとチャンネルを切り替えます。
 #
 # 詳細：
 #   Radio & Jukebox
@@ -35,14 +36,9 @@ BTN_IO=26                       # タクトスイッチのGPIO ポート番号
 # インターネットラジオ局の登録
 urls=(
     "181.fm__Power181 http://listen.livestreamingservice.com/181-power_64k.aac"
-    "181.fm__UK_Top40 http://listen.livestreamingservice.com/181-uktop40_64k.aac"
     "181.fm__The_Beat http://listen.livestreamingservice.com/181-beat_64k.aac"
     "1.FM_AmsteTrance http://185.33.21.111:80/atr_128"
     "NHK-FM__(Osaka)_ https://radio-stream.nhk.jp/hls/live/2023509/nhkradirubkfm/master.m3u8"
-    "181.fm__Pow[Exp] http://listen.livestreamingservice.com/181-powerexplicit_64k.aac"
-    "181.fm__Energy93 http://listen.livestreamingservice.com/181-energy93_64k.aac"
-    "181.fm__The_Box_ http://listen.livestreamingservice.com/181-thebox_64k.aac"
-    "181.fm_TranceJaz http://listen.livestreamingservice.com/181-trancejazz_64k.aac"
     "NHK-N1__(Osaka)_ https://radio-stream.nhk.jp/hls/live/2023508/nhkradirubkr1/master.m3u8"
 )
 urln=${#urls[*]}
