@@ -1,19 +1,19 @@
 #!/bin/bash
-# Internet Radio with LCD
+# Internet music_box with LCD
 
 ################################################################################
 # 元ソース：
-# https://github.com/bokunimowakaru/audio/blob/master/radio/pi/radio.sh
+# https://github.com/bokunimowakaru/audio/blob/master/music_box/pi/music_box.sh
 # https://github.com/bokunimowakaru/raspi_lcd/blob/master/example_Pi5.sh
 # https://github.com/bokunimowakaru/raspi_lcd/blob/master/raspi_i2c.c
 ################################################################################
 
 # 解説：
 #   実行するとインターネットラジオを再生します。
-#   GPIO 26に接続したボタンを押すとチャンネルを切り替えます。
+#   GPIO 26に接続したボタンを押すと楽曲を切り替えます。
 #
 # 詳細：
-#   Radio & Jukebox
+#   music_box & Jukebox
 #   https://bokunimo.net/blog/raspberry-pi/3179/
 #
 #   DAC PCM5102A で Raspberry Pi オーディオ
@@ -26,31 +26,25 @@
 LCD_IO=4                        # LCDリセット用IOポート番号を設定する
 BTN_IO=26                       # タクトスイッチのGPIO ポート番号
 
-# インターネットラジオ局の登録
-urls=(
-    "181.fm__Power181 http://listen.livestreamingservice.com/181-power_64k.aac"
-    "181.fm__UK_Top40 http://listen.livestreamingservice.com/181-uktop40_64k.aac"
-    "181.fm__The_Beat http://listen.livestreamingservice.com/181-beat_64k.aac"
-    "1.FM_AmsteTrance http://185.33.21.111:80/atr_128"
-    "NHK-FM__(Osaka)_ https://radio-stream.nhk.jp/hls/live/2023509/nhkradirubkfm/master.m3u8"
-    "181.fm__Pow[Exp] http://listen.livestreamingservice.com/181-powerexplicit_64k.aac"
-    "181.fm__Energy93 http://listen.livestreamingservice.com/181-energy93_64k.aac"
-    "181.fm__The_Box_ http://listen.livestreamingservice.com/181-thebox_64k.aac"
-    "181.fm_TranceJaz http://listen.livestreamingservice.com/181-trancejazz_64k.aac"
-    "NHK-N1__(Osaka)_ https://radio-stream.nhk.jp/hls/live/2023508/nhkradirubkr1/master.m3u8"
+# 楽曲ファイルの登録
+plist=(
+    "../media/music/Message.flac"
+    "../media/music/Short-Cut.mp3"
+    "../media/music/Thirsty.mp3"
+    "../media/music/Wonderful.mp3"
 )
-urln=${#urls[@]}
+plist_n=${#plist[@]}
 
-# ラジオ再生用の関数を定義
-radio (){
-    echo `date` "radio ch =" $1
-    if [ $1 -ge 1 ] && [ $1 -le $urln ]; then
-        url_ch=(${urls[$(($1 - 1))]})
-        echo `date` "Internet Radio =" ${url_ch[0]}
+# 音楽再生用の関数を定義
+music_box (){
+    echo `date` "music_box Num =" $1
+    if [ $1 -ge 1 ] && [ $1 -le $plist_n ]; then
+        name=(${plist[$(($1 - 1))]})
+        echo `date` "Internet music_box =" ${name}
         kill `pidof ffplay` &> /dev/null
-        ffplay -nodisp ${url_ch[1]} 2>&1 | ${0} lcd_out &
+        ffplay -nodisp -autoexit ${name} 2>&1 | ${0} lcd_out &
     else
-        echo `date` "ERROR radio ch" $1
+        echo `date` "ERROR music_box Num" $1
     fi
 }
 
@@ -69,13 +63,13 @@ lcd (){
     i2cset -y 1 0x3e 0x40 ${hex2} 32 32 32 32 32 32 32 32 i
 }
 
-# チャンネル名（icy-description）の表示実行部
+# メタデータ（TITLE）の表示実行部
 if [[ ${1} == "lcd_out" ]]; then
     echo `date` "Started Subprocess lcd_out"
     while read s; do
-        s=`echo ${s}|grep "icy-description"|cut -d" " -f3-`
+        s=`echo ${s}|grep "TITLE *:"|cut -d" " -f3-`
         if [[ -n ${s} ]]; then
-            echo `date` "icy-description =" ${s}
+            echo `date` "Metadata (TITLE) =" ${s}
             lcd ${s}
         fi
     done
@@ -83,7 +77,7 @@ if [[ ${1} == "lcd_out" ]]; then
 fi
 
 # メイン処理部 #################################################################
-echo "Usage: "${0}              # プログラム名と使い方を表示する
+echo "Usage:" ${0}              # プログラム名と使い方を表示する
 gpio_app="pinctrl"              # GPIO制御にpinctrlを使用する for Raspberry Pi 5
 # gpio_app="raspi-gpio"         # GPIO制御にraspi-gpioを使用する
 
@@ -97,19 +91,19 @@ ${gpio_app} set ${LCD_IO} dh    # GPIOにHレベルを出力
 sleep 0.1                       # 0.1秒の待ち時間処理
 i2cset -y  1 0x3e 0x00 0x39  0x14  0x73 0x56 0x6c 0x38 0x0C i
 sleep 0.1                       # 0.1秒の待ち時間処理
-lcd "InternetRadio"             # LCDにタイトルを表示
+lcd "Jukebox ffPlayer"          # LCDにタイトルを表示
 
-ch=0                            # チャンネル
+num=0                           # 楽曲番号
 while true; do                  # 永久ループ
     pidof ffplay > /dev/null                # ffplayが動作しているかどうかを確認
     if [ $? -ne 0 ]; then                   # 動作していなかったとき
-        echo `date` "PLAY Radio"            # PLAY Radioを表示
-        ch=$(( ch + 1 ))                    # チャンネル番号に1を加算
-        if [[ ${ch} -gt ${urln} ]]; then    # チャンネル数を超えていた時
-            ch=1                            # チャンネル1に設定する
+        echo `date` "PLAY music_box"        # PLAY music_boxを表示
+        num=$(( num + 1 ))                  # 楽曲番号に1を加算
+        if [[ ${num} -gt ${plist_n} ]]; then # 楽曲数を超えていた時
+            num=1                           # 楽曲番号を1に設定する
         fi
-        lcd ${urls[$(( ch - 1 ))]}          # urlsに登録したチャンネル名を表示
-        radio ${ch}                         # 関数 radioを呼び出し
+        lcd ${plist[$(( num - 1 ))]##*/}    # plistに登録した楽曲名を表示
+        music_box ${num}                    # 関数 music_boxを呼び出し
         trap "kill `pidof ffplay` &> /dev/null" EXIT # 終了時にffplayを終了する
         sleep 1                             # 0.1秒の待ち時間処理
     fi
@@ -128,7 +122,7 @@ while true; do                  # 永久ループ
         fi
     fi
     if [[ btn -eq 1 ]]; then                # ボタンが押された時
-        echo `date` "CHANNEL Button Pressed"
+        echo `date` "USER Button Pressed"   # 表示
         kill `pidof ffplay` &> /dev/null    # ffplayを終了
         sleep 1                             # 終了待ち・チャタリング防止
     fi
