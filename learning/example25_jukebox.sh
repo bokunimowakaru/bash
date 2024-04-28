@@ -9,15 +9,8 @@
 ################################################################################
 
 # 解説：
-#   実行するとインターネットラジオを再生します。
+#   実行すると楽曲ファイルを再生します。
 #   GPIO 26に接続したボタンを押すと楽曲を切り替えます。
-#
-# 詳細：
-#   music_box & Jukebox
-#   https://bokunimo.net/blog/raspberry-pi/3179/
-#
-#   DAC PCM5102A で Raspberry Pi オーディオ
-#   https://bokunimo.net/blog/raspberry-pi/3123/
 #
 # ffmpegのインストール：
 #   $ sudo apt install ffmpeg ⏎
@@ -28,9 +21,8 @@ BTN_IO=26                       # タクトスイッチのGPIO ポート番号
 
 # 楽曲ファイルの登録
 plist=(
-    "../media/music/Message.flac"
-    "../media/music/Short-Cut.mp3"
     "../media/music/Thirsty.mp3"
+    "../media/music/Short-Cut.mp3"
     "../media/music/Wonderful.mp3"
 )
 plist_n=${#plist[@]}
