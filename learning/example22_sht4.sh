@@ -15,7 +15,6 @@ udp_port=1024                                           # CSVxUDP ポート番�
 device="humid_1"                                        # CSVxUDP デバイス名
 
 url="http://ambidata.io"                                # 送信先アドレス
-sensor="/sys/devices/virtual/thermal/thermal_zone0/temp" # CPUの温度センサ
 udp_app="../tools/udp_sender.py"                        # UDP送信プログラム
 sht4_app="../gpio/sht4-bsd3clause/sht4x_i2c"            # SHT4xの読み取り
 interval=30                                             # 測定間隔(30秒以上)
