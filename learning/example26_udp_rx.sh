@@ -16,5 +16,5 @@ echo "Listening UDP port "${PORT}"..."      # ポート番号表示
 while true; do                              # 永久ループ
     UDP=`nc -luw0 ${PORT}`                  # UDPパケットを取得
     DATE=`date "+%Y/%m/%d %R"`              # 日時を取得
-    echo -E $DATE, $UDP                     # 取得日時とデータを表示
+    echo -E ${DATE}, ${UDP}                 # 取得日時とデータを表示
 done                                        # 永久ループを繰り返す
