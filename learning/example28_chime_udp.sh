@@ -23,7 +23,7 @@ if [[ ${1} == "http_srv" ]]; then       # HTTPサーバの起動指示があっ�
     "                                   # HTTP + HTMLコンテンツ
     while true; do                                      # HTTP待ち受け
         echo -e $HTML\
-        |sudo nc -lw1 -v 8080\
+        |nc -lw1 -v 8080\
         |while read tcp; do
             HTTP=`echo -E ${tcp}|cut -d"=" -f1`         # HTTPコマンドを抽出
             if [[ ${HTTP} = "GET /?" || ${HTTP} = "GET /?BELL" ]]; then

@@ -25,7 +25,7 @@ HTML="HTTP/1.0 200 OK\nContent-Type: text/html\nConnection: close\n\n<html>\n\
 echo "HTTP Server Started http://"${IP}":"${PORT}"/"    # アクセス用URL表示
 while true; do                                          # HTTP待ち受け
     echo -e $HTML\
-    |sudo nc -lw1 -v 8080\
+    |nc -lw1 -v 8080\
     |while read tcp; do
         DATE=`date "+%Y/%m/%d %R"`                      # 時刻を取得
         HTTP=`echo -E ${tcp}|cut -d"=" -f1`             # HTTPコマンドを抽出
