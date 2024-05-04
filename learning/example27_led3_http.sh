@@ -26,7 +26,7 @@ echo "HTTP Server Started http://"${IP}":"${PORT}"/"    # アクセス用URL表�
 while true; do                                          # HTTP待ち受け
     echo -e $HTML\
     |nc -lw1 -v 8080\
-    |while read tcp; do
+    |while read tcp; do                                 # 受信データをtcpに代入
         DATE=`date "+%Y/%m/%d %R"`                      # 時刻を取得
         HTTP=`echo -E ${tcp}|cut -d"=" -f1`             # HTTPコマンドを抽出
         if [[ ${HTTP} = "GET /?COLOR" || ${HTTP} = "GET /?" ]]; then
