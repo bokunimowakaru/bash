@@ -44,7 +44,7 @@ echo "Listening UDP port "${PORT_UDP}"..."  # ポート番号表示
 while true; do                              # 永久ループ
     UDP=`nc -luw0 ${PORT_UDP}`              # UDPパケットを取得
     echo -E `date "+%Y/%m/%d %R"`, ${UDP}   # 取得日時とデータを表示
-    if [[ ${UDP} = "btn_s_1,1" ]]; then     # ボタン押下情報の受信時
+    if [[ ${UDP} = "btn_s_1,1" || ${UDP} = "pir_s_1,1" ]]; then # ボタン押下時
         ${chime_app} ${port}                # チャイム音を鳴らす
     fi
 done                                        # 永久ループを繰り返す
