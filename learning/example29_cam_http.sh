@@ -41,5 +41,5 @@ payload_rx (){                          # HTTPリクエスト受信処理(レス
 # メイン処理部 #################################################################
 while true; do                                              # 繰り返し処理
     echo "HTTP Server Started http://"${IP}":"${PORT}"/"    # アクセス用URL表示
-    nc -lw1 -v 8080 < payload_tx| payload_rx > payload_tx   # HTTP待ち受け
+    nc -lw1 -v ${PORT} < payload_tx| payload_rx > payload_tx # HTTP待ち受け
 done                                                        # 繰り返しここまで
