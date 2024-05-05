@@ -31,10 +31,10 @@ payload_rx (){                          # HTTPリクエスト受信処理(レス
             cat head.http cam.jpg                       # レスポンスを標準出力
         elif [[ ${HTTP:0:6} = "GET / " ||  ${HTTP:0:6} = "GET /?" ]]; then
             echo -e ${HTML}                             # HTMLコンテンツを出力
-            ${cam_app} -n -o cam.jpg --width 640 --height 480
+            ${cam_app} -n -t 100 -o cam.jpg --width 640 --height 480 # 写真撮影
         elif [[ ${HTTP:0:5} = "GET /" ]]; then          # 他の要求時にエラー出力
             echo -e ${error}
-            ${cam_app} -n -o cam.jpg --width 640 --height 480
+            ${cam_app} -n -t 100 -o cam.jpg --width 640 --height 480 # 写真撮影
         fi
     done
 }

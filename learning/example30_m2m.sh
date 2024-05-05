@@ -37,15 +37,20 @@ ${0} http_srv &                                         # HTTPサーバを起動
 echo "HTTP Server http://"${HTTP_IP}"/"                 # アクセス用URL表示
 trap "kill `pidof -x ${0}`;kill `pidof nc`" EXIT SIGINT # Ctrl-CでHTTPを終了する
 
+# HTTPクライアント部(カメラ撮影) ###############################################
+camera (){
+    curl "http://"${CAMERA_IP}"/"                       # 写真撮影
+    sleep 5                                             # 撮影完了待ち
+    pict=${PICT}`date +"%y%m%d%H%M%S"`.jpg              # 写真のファイル名
+    curl "http://"${CAMERA_IP}"/cam.jpg" -o ${pict}     # 写真を取得して保存
+}
+
 # メイン処理部 #################################################################
-echo "Listening UDP port "${PORT_UDP}"..."  # ポート番号表示
-while true; do                              # 永久ループ
-    UDP=`nc -luw0 ${PORT_UDP}`              # UDPパケットを取得
+echo "Listening UDP port "${PORT_UDP}"..."              # ポート番号表示
+while true; do                                          # 永久ループ
+    UDP=`nc -luw0 ${PORT_UDP}`                          # UDPパケットを取得
     echo -E `date "+%Y/%m/%d %R"`, ${UDP}| tee -a ${LOG} # 取得データの保存
     if [[ ${UDP} = "btn_s_1,1" || ${UDP} = "pir_s_1,1" ]]; then # ボタン押下時
-        curl "http://"${CAMERA_IP}"/"       # 写真撮影
-        sleep 5                             # 撮影完了待ち
-        pict=${PICT}`date +"%y%m%d%H%M%S"`.jpg # 写真のファイル名
-        curl "http://"${CAMERA_IP}"/cam.jpg" -o ${pict} # 写真を取得して保存
+        camera &                                        # カメラ撮影の実行
     fi
-done                                        # 永久ループを繰り返す
+done                                                    # 永久ループを繰り返す
