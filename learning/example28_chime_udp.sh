@@ -4,7 +4,7 @@
 #                                          Copyright (c) 2017-2024 Wataru KUNINO
 ################################################################################
 
-IP=""                                   # 本機のIPアドレス
+IP=`hostname -I|cut -d" " -f1`          # 本機のIPアドレス
 PORT_UDP=1024                           # UDP待ち受けポート番号
 PORT_HTTP=8080                          # HTTP待ち受けポート番号
 chime_app="../gpio/chime_zero.py"       # チャイム音の駆動にchime_zero.pyを使用
@@ -12,8 +12,7 @@ port=4                                  # 圧電スピーカを接続するGPIO 
 
 # HTTPサーバ実行部 #############################################################
 if [[ ${1} == "http_srv" ]]; then       # HTTPサーバの起動指示があった時
-    echo `date` "Started Subprocess http_srv"
-    if [[ ${IP} = "" ]]; then IP=`hostname -I|cut -d" " -f1`; fi # IPアドレス
+    echo `date "+%Y/%m/%d %R"` "Started Subprocess http_srv"
     HTML="HTTP/1.0 200 OK\nContent-Type: text/html\nConnection: close\n\n\
         <html>\n<head>\n<title>Chime</title>\n\
         <meta http-equiv=\"Content-type\" content=\"text/html; charset=UTF-8\">\
@@ -25,17 +24,17 @@ if [[ ${1} == "http_srv" ]]; then       # HTTPサーバの起動指示があっ�
         echo -e $HTML\
         |nc -lw1 -v ${PORT_HTTP}\
         |while read tcp; do                             # 受信データをtcpに代入
-            HTTP=`echo -E ${tcp}|cut -d"=" -f1`         # HTTPコマンドを抽出
-            if [[ ${HTTP} = "GET /?" || ${HTTP} = "GET /?BELL" ]]; then
+            if [[ ${tcp:0:6} = "GET /?" ]]; then
                 echo -E `date "+%Y/%m/%d %R"`, ${tcp}   # 取得日時とデータを表示
                 ${chime_app} ${port}                    # チャイム音を鳴らす
             fi
-    done; done                                          # 繰り返しここまで
+        done
+    done                                                # 繰り返しここまで
 fi
 
 ${0} http_srv &                                         # HTTPサーバを起動する
-echo "HTTP Server Started http://"${IP}":"${PORT_HTTP}"/" # アクセス用URL表示
-trap "kill `pidof -x ${0}`" SIGINT          # Ctrl-CでHTTPサーバを終了する
+echo "HTTP Server http://"${IP}":"${PORT_HTTP}"/"       # アクセス用URL表示
+trap "kill `pidof -x ${0}`;kill `pidof nc`" EXIT SIGINT # Ctrl-CでHTTPを終了する
 
 # メイン処理部 #################################################################
 

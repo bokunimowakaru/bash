@@ -4,9 +4,8 @@
 #                                          Copyright (c) 2017-2024 Wataru KUNINO
 ################################################################################
 
-IP=""                                   # 本機のIPアドレス
+IP=`hostname -I|cut -d" " -f1`          # 本機のIPアドレス
 PORT=8080                               # 待ち受けポート番号
-if [[ ${IP} = "" ]]; then IP=`hostname -I|cut -d" " -f1`; fi # IPアドレスを取得
 URL="http://"${IP}":"${PORT}
 HTML="HTTP/1.0 200 OK\nContent-Type: text/html\nConnection: close\n\n<html>\n\
     <head>\n<title>Camera</title>\n\

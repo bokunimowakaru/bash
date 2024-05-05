@@ -4,14 +4,13 @@
 #                                          Copyright (c) 2017-2024 Wataru KUNINO
 ################################################################################
 
-IP=""                                   # 本機のIPアドレス
+IP=`hostname -I|cut -d" " -f1`          # 本機のIPアドレス
 PORT=8080                               # 待ち受けポート番号
 gpio_app="pinctrl"                      # GPIO制御に新しいpinctrlを使用する
 # gpio_app="raspi-gpio"                 # GPIO制御に従来のraspi-gpioを使用する
 ports=(17 27 22)                        # 赤,緑,青LED用 GPIOポート番号
 d=("dl" "dh")                           # GPIOの論理値の定義
 
-if [[ ${IP} = "" ]]; then IP=`hostname -I|cut -d" " -f1`; fi # IPアドレスを取得
 HTML="HTTP/1.0 200 OK\nContent-Type: text/html\nConnection: close\n\n<html>\n\
     <head>\n<title>COLOR LED</title>\n\
     <meta http-equiv=\"Content-type\" content=\"text/html; charset=UTF-8\">\n\
