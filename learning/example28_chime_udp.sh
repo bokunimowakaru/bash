@@ -35,7 +35,6 @@ fi
 
 ${0} http_srv &                                         # HTTPサーバを起動する
 echo "HTTP Server Started http://"${IP}":"${PORT_HTTP}"/" # アクセス用URL表示
-pidof -x ${0}
 trap "kill `pidof -x ${0}`" SIGINT          # Ctrl-CでHTTPサーバを終了する
 
 # メイン処理部 #################################################################
