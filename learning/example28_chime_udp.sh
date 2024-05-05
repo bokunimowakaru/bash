@@ -24,7 +24,7 @@ if [[ ${1} == "http_srv" ]]; then       # HTTPサーバの起動指示があっ�
     while true; do                                      # HTTP待ち受け
         echo -e $HTML\
         |nc -lw1 -v ${PORT_HTTP}\
-        |while read tcp; do
+        |while read tcp; do                             # 受信データをtcpに代入
             HTTP=`echo -E ${tcp}|cut -d"=" -f1`         # HTTPコマンドを抽出
             if [[ ${HTTP} = "GET /?" || ${HTTP} = "GET /?BELL" ]]; then
                 echo -E `date "+%Y/%m/%d %R"`, ${tcp}   # 取得日時とデータを表示
