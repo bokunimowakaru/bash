@@ -19,7 +19,7 @@ if [[ ${1} == "http_srv" ]]; then       # HTTPサーバの起動指示があっ�
         \n</head>\n<body>\n<h3>Chime</h3>\n\
         <form method=\"GET\" action=\"http://"${IP}":"${PORT_HTTP}"/\">\n\
         Ring <input type=\"submit\" value=\"送信\">\n</form>\n</html>\n\n\
-    "                                   # HTTP + HTMLコンテンツ
+    "                                                   # HTTP + HTMLコンテンツ
     while true; do                                      # HTTP待ち受け
         echo -e $HTML\
         |nc -lw1 -v ${PORT_HTTP}\
