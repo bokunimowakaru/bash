@@ -24,7 +24,7 @@ if [[ ${1} == "http_srv" ]]; then       # HTTPサーバの起動指示があっ�
         echo -e $HTML\
         |nc -lw1 -v ${PORT_HTTP}\
         |while read tcp; do                             # 受信データをtcpに代入
-            if [[ ${tcp:0:6} = "GET /?" ]]; then
+            if [[ ${tcp:0:6} == "GET /?" ]]; then       # HTTP GETとクエリ要求時
                 echo -E `date "+%Y/%m/%d %R"`, ${tcp}   # 取得日時とデータを表示
                 ${chime_app} ${port}                    # チャイム音を鳴らす
             fi
@@ -42,7 +42,7 @@ echo "Listening UDP port "${PORT_UDP}"..."  # ポート番号表示
 while true; do                              # 永久ループ
     UDP=`nc -luw0 ${PORT_UDP}`              # UDPパケットを取得
     echo -E `date "+%Y/%m/%d %R"`, ${UDP}   # 取得日時とデータを表示
-    if [[ ${UDP} = "btn_s_1,1" || ${UDP} = "pir_s_1,1" ]]; then # ボタン押下時
+    if [[ ${UDP} == "btn_s_1,1" || ${UDP} == "pir_s_1,1" ]]; then # ボタン押下時
         ${chime_app} ${port}                # チャイム音を鳴らす
     fi
 done                                        # 永久ループを繰り返す

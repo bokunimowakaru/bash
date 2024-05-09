@@ -100,9 +100,9 @@ while true; do                  # 永久ループ
         sleep 1                             # 0.1秒の待ち時間処理
     fi
     btn=`${gpio_app} get ${BTN_IO}`         # ボタン状態を取得
-    if [[ ${btn:15:2} = "lo" ]]; then       # 入力値がLレベルの時
+    if [[ ${btn:15:2} == "lo" ]]; then      # 入力値がLレベルの時
         btn=1                               # 変数btnに1を代入
-    elif [[ ${btn:15:2} = "hi" ]]; then     # 入力値がHレベルの時
+    elif [[ ${btn:15:2} == "hi" ]]; then    # 入力値がHレベルの時
         btn=0                               # 変数btnに0を代入
     else                                    # その他の場合(raspi-gpioなど)
         btn=`echo ${btn}|tr " " "\n"|grep "level="` # ボタンレベル値を取得

@@ -28,7 +28,7 @@ while true; do                                          # HTTP待ち受け
     |while read tcp; do                                 # 受信データをtcpに代入
         DATE=`date "+%Y/%m/%d %R"`                      # 時刻を取得
         HTTP=`echo -E ${tcp}|cut -d"=" -f1`             # HTTPコマンドを抽出
-        if [[ ${HTTP} = "GET /?COLOR" || ${HTTP} = "GET /?" ]]; then
+        if [[ ${HTTP} == "GET /?COLOR" || ${HTTP} == "GET /?" ]]; then
             echo -E $DATE, ${tcp}                       # 取得日時とデータを表示
             color=`echo -E ${tcp}|cut -d"=" -f2|cut -d" " -f1` # 色値(0~7)を取得
             if [[ ${color} < 0 || ${color} > 7 ]]; then # 色の値が範囲外の時

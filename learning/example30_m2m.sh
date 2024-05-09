@@ -50,7 +50,7 @@ echo "Listening UDP port "${PORT_UDP}"..."              # ポート番号表示
 while true; do                                          # 永久ループ
     UDP=`nc -luw0 ${PORT_UDP}`                          # UDPパケットを取得
     echo -E `date "+%Y/%m/%d %R"`, ${UDP}| tee -a ${LOG} # 取得データの保存
-    if [[ ${UDP} = "btn_s_1,1" || ${UDP} = "pir_s_1,1" ]]; then # ボタン押下時
+    if [[ ${UDP} == "btn_s_1,1" || ${UDP} == "pir_s_1,1" ]]; then # ボタン押下時
         camera &                                        # カメラ撮影の実行
     fi
 done                                                    # 永久ループを繰り返す

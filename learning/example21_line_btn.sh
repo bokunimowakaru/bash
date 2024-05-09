@@ -45,14 +45,14 @@ prev=0                                      # 前回値を保持する変数prev
 
 while true; do                              # 永久ループ
     btn=`${gpio_app} get ${port}`           # ボタン状態を取得
-    if [[ ${btn:15:2} = "lo" ]]; then       # 入力値がLレベルの時
+    if [[ ${btn:15:2} == "lo" ]]; then      # 入力値がLレベルの時
         val=0                               # 変数valに0を代入
-    elif [[ ${btn:15:2} = "hi" ]]; then     # 入力値がHレベルの時
+    elif [[ ${btn:15:2} == "hi" ]]; then    # 入力値がHレベルの時
         val=1                               # 変数valに1を代入
     else                                    # その他の場合(raspi-gpioなど)
         val=`echo ${btn}|tr " " "\n"|grep "level="` # ボタンレベル値を取得
         val=${val:6:1}                      # レベル値を抽出
-        if [[ ${val} = "" ]]; then          # レベル値が得られなかったとき
+        if [[ ${val} == "" ]]; then         # レベル値が得られなかったとき
             val=0                           # 変数valに0を代入
         fi
     fi

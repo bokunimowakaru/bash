@@ -25,14 +25,14 @@ trap "rm -f payload_tx; exit" SIGINT    # Ctrl-Cでパイプ切断し、プロ�
 payload_rx (){                          # HTTPリクエスト受信処理(レスポンス出力)
     while read tcp; do                                  # 標準入力から受信
         HTTP=`echo -E ${tcp}|cut -d"=" -f1`             # HTTPコマンドを抽出
-        if [[ ${HTTP:0:13} = "GET /cam.jpg " ]]; then   # 写真データ取得指示時
+        if [[ ${HTTP:0:13} == "GET /cam.jpg " ]]; then  # 写真データ取得指示時
             LENGTH=`ls -l cam.jpg|cut -d" " -f5`        # ファイルサイズを抽出
             echo -e ${head}|sed -e "s/LENGTH/${LENGTH}/g" > head.http
             cat head.http cam.jpg                       # レスポンスを標準出力
-        elif [[ ${HTTP:0:6} = "GET / " ||  ${HTTP:0:6} = "GET /?" ]]; then
+        elif [[ ${HTTP:0:6} == "GET / " ||  ${HTTP:0:6} == "GET /?" ]]; then
             echo -e ${HTML}                             # HTMLコンテンツを出力
             ${cam_app} -n -t 100 -o cam.jpg --width 640 --height 480 # 写真撮影
-        elif [[ ${HTTP:0:5} = "GET /" ]]; then          # 他の要求時にエラー出力
+        elif [[ ${HTTP:0:5} == "GET /" ]]; then         # 他の要求時にエラー出力
             echo -e ${error}
             ${cam_app} -n -t 100 -o cam.jpg --width 640 --height 480 # 写真撮影
         fi
