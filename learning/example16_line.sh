@@ -50,7 +50,7 @@ line_notify() {                                 # メッセージ送信用の関
         -d "${json}" \
         ${url_s}v2/bot/message/broadcast`       # LINEにメッセージを送信する
     if [[ ${res} ]]; then                       # 応答があった場合
-        if [[ ${res}="{}" ]]; then              # メッセージが無かった場合
+        if [[ ${res} == "{}" ]]; then           # メッセージが無かった場合
             echo ${message}" -> OK "            # 送信メッセージとOKを表示する
         else                                    # メッセージが存在した場合
             echo ${message}" -> "${res}         # 送信メッセージと応答を表示する
