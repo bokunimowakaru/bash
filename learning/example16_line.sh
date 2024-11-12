@@ -13,7 +13,7 @@
 #                      Copyright (c) 2024 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 # 注意事項
-# ・メッセージ送信回数の無料枠は執筆時点で200回です。超過分は有料となります。
+# ・メッセージ送信回数の無料枠は200回/月です。超過分は有料となります。
 # ・15分間だけ有効なステートレスチャネルアクセストークンを使用しています。
 # 　本スクリプトでは、実行の度にTokenを取得するので問題ありません。
 # 　関数line_notifyを複数回、呼び出すような場合は、15分以内にget_line_tokenで
@@ -27,7 +27,7 @@ url_s="https://api.line.me/"                    # LINE Messaging API のURL
 
 # LINE Messaging API用の Token の取得部
 get_line_token(){
-    res=`curl -s -m3 -XPOST\
+    res=`curl -s -m3 -XPOST \
         -H 'Content-Type: application/x-www-form-urlencoded' \
         --data-urlencode 'grant_type=client_credentials' \
         --data-urlencode 'client_id='${line_ch_id} \
@@ -40,14 +40,14 @@ get_line_token(){
 line_notify() {                                 # メッセージ送信用の関数
     time=`date "+%Y/%m/%d %R"`                  # 現在の日時を取得する
     line_token="${1}"                           # LINE Token を代入
-    message="${2}(${time})"                     # 引き数と日時を連結する
-    # echo ${line_token}    ## デバッグ用 ##
+    message="${2} (${time})"                    # 引き数と日時を連結する
+    echo ${line_token}    ## デバッグ用 ##
     json='{"messages":[{"type":"text","text":"'${message}'"}]}'
-    # echo ${json}          ## デバッグ用 ##
-    res=`curl -s -m3 -XPOST\
+    echo ${json}          ## デバッグ用 ##
+    res=`curl -m3 -XPOST \
         -H 'Content-Type: application/json' \
         -H 'Authorization: Bearer '${line_token} \
-        -d ${json} \
+        -d "${json}" \
         ${url_s}v2/bot/message/broadcast`       # LINEにメッセージを送信する
     if [[ ${res} ]]; then                       # 応答があった場合
         echo ${message}" -> OK "${res}          # 送信メッセージと応答を表示する
