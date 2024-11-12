@@ -41,9 +41,9 @@ line_notify() {                                 # メッセージ送信用の関
     time=`date "+%Y/%m/%d %R"`                  # 現在の日時を取得する
     line_token="${1}"                           # LINE Token を代入
     message="${2}(${time})"                     # 引き数と日時を連結する
-    echo ${line_token}
+    # echo ${line_token}    ## デバッグ用 ##
     json='{"messages":[{"type":"text","text":"'${message}'"}]}'
-    echo ${json}
+    # echo ${json}          ## デバッグ用 ##
     res=`curl -s -m3 -XPOST\
         -H 'Content-Type: application/json' \
         -H 'Authorization: Bearer '${line_token} \
