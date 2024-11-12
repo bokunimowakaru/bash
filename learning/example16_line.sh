@@ -56,3 +56,8 @@ else                                            # 引数が1つ以上の時
     line_notify "${token}" "${data}"            # line_notifyに入力引数を渡す
 fi                                              # 条件文ifの処理の終了
 exit                                            # プログラムの終了
+
+###############################################################################
+# 参考文献：下記のcurl文の一部を引用しました
+# LINE DevelopersLINE Developers, Messaging APIリファレンス
+# https://developers.line.biz/ja/reference/messaging-api/
