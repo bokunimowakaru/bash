@@ -41,16 +41,20 @@ line_notify() {                                 # メッセージ送信用の関
     time=`date "+%Y/%m/%d %R"`                  # 現在の日時を取得する
     line_token="${1}"                           # LINE Token を代入
     message="${2} (${time})"                    # 引き数と日時を連結する
-    echo ${line_token}    ## デバッグ用 ##
+    # echo ${line_token}    ## デバッグ用 ##
     json='{"messages":[{"type":"text","text":"'${message}'"}]}'
-    echo ${json}          ## デバッグ用 ##
-    res=`curl -m3 -XPOST \
+    # echo ${json}          ## デバッグ用 ##
+    res=`curl -s -m3 -XPOST \
         -H 'Content-Type: application/json' \
         -H 'Authorization: Bearer '${line_token} \
         -d "${json}" \
         ${url_s}v2/bot/message/broadcast`       # LINEにメッセージを送信する
     if [[ ${res} ]]; then                       # 応答があった場合
-        echo ${message}" -> OK "${res}          # 送信メッセージと応答を表示する
+        if [[ ${res}="{}" ]]; then              # メッセージが無かった場合
+            echo ${message}" -> OK "            # 送信メッセージとOKを表示する
+        else                                    # メッセージが存在した場合
+            echo ${message}" -> "${res}         # 送信メッセージと応答を表示する
+        fi
     else                                        # 応答が無かった場合
         echo "ERROR"                            # ERRORを表示
     fi                                          # ifの終了
