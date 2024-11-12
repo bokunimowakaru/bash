@@ -4,9 +4,17 @@
 ###############################################################################
 #
 # LINE 公式アカウントと Messaging API 用のChannel情報が必要です。
-#    1. https://manager.line.biz/ へアクセス
+#   1. https://entry.line.biz/start/jp/ からLINE公式アカウントを取得する
+#   2. https://manager.line.biz/ の設定で「Messaging APIを利用する」を実行する
+#   3. Channel 情報 (Channel ID と Channel secret) を取得する
+#   4. スクリプト内の変数 line_ch_id にChannel IDを記入する
+#   5. スクリプト内の変数 line_ch_pw にChannel secretを記入する
 #
 #                      Copyright (c) 2024 Wataru KUNINO (https://bokunimo.net/)
+###############################################################################
+# 注意事項
+# ・メッセージ送信回数の無料枠は執筆時点で200回です。超過分は有料となります。
+# ・15分だけ有効なステートレスチャネルアクセストークンを使用しています。
 ###############################################################################
 
 # Messaging API用 Channel情報
@@ -22,7 +30,7 @@ get_line_token(){
         --data-urlencode 'client_id='${line_ch_id} \
         --data-urlencode 'client_secret='${line_ch_pw}\
          ${url_s}oauth2/v3/token`               # LINEからTokenを取得する
-    echo $res|tr "," "\n"|grep "access_token"|tr ":" " " |awk '{print $2}'|tr -d '"'
+    echo $res|tr "," "\n"|grep "access_token"|tr ":" " "|awk '{print $2}'|tr -d '"'
 }
 
 # LINE送信用の関数line_notify()定義部
@@ -61,3 +69,4 @@ exit                                            # プログラムの終了
 # 参考文献：下記のcurl文の一部を引用しました
 # LINE DevelopersLINE Developers, Messaging APIリファレンス
 # https://developers.line.biz/ja/reference/messaging-api/
+###############################################################################
