@@ -1,2 +1,2 @@
 #分 時 日 月 曜日       command
-@reboot                 nohup ~/bash/learning/example13_ssh_mon.sh &> /dev/null &
+@reboot                 nohup ~/bash/learning/example13_ssh_mon_line.sh &> /dev/null &
