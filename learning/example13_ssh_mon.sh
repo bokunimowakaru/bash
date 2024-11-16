@@ -23,7 +23,6 @@ file_log="/home/pi/ssh_mon.log"
 password="****************" # ユーザのパスワードを平文で記入します【危険あり】
 
 if [[ ${1} == "std_in" ]]; then
-    # line_notify "起動しました"
     while read line; do
         data=`echo ${line}|grep -e "password" -e "Successful" -e "FAILED"`
         if [[ ${data} ]]; then
