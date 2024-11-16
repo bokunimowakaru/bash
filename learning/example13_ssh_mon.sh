@@ -19,8 +19,9 @@
 #                 Copyright (c) 2023-2024 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 
-file_log="/home/pi/ssh_mon.log"
 password="****************" # ユーザのパスワードを平文で記入します【危険あり】
+
+file_log="/home/pi/ssh_mon.log"
 
 if [[ ${1} == "std_in" ]]; then
     while read line; do
