@@ -40,7 +40,7 @@ get_line_token(){
 line_notify() {                                 # メッセージ送信用の関数
     time=`date "+%Y/%m/%d %R"`                  # 現在の日時を取得する
     line_token="${1}"                           # LINE Token を代入
-    message="${2} (${time})"                    # 引き数と日時を連結する
+    message="[raspi] ${2} (${time})"            # 引き数と日時を連結する
     # echo ${line_token}    ## デバッグ用 ##
     json='{"messages":[{"type":"text","text":"'${message}'"}]}'
     # echo ${json}          ## デバッグ用 ##
