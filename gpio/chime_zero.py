@@ -28,7 +28,7 @@ def chime():                            # チャイム（スレッド用）
 
 print(argv[0])                          # プログラム名を表示する
 if len(argv) >= 2:                      # 引数があるとき
-    port_chime = int(argv[1])           # GPIOポート番号をport_chimeへ
+    port = int(argv[1])                 # GPIOポート番号をportへ
 
 pwm = TonalBuzzer(port)                 # PWM出力用のインスタンスを生成
 chime()                                 # チャイム音
