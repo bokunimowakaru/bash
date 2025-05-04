@@ -10,7 +10,7 @@
 #   4. スクリプト内の変数 line_ch_id にChannel IDを記入する
 #   5. スクリプト内の変数 line_ch_pw にChannel secretを記入する
 #
-#                      Copyright (c) 2024 Wataru KUNINO (https://bokunimo.net/)
+#                 Copyright (c) 2024-2025 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 # 注意事項
 # ・メッセージ送信回数の無料枠は200回/月です。超過分は有料となります。

@@ -4,7 +4,7 @@
 #
 # 送信先：LAN CSVxUDP方式 (https://bokunimo.net/iot/CSVxUDP/)
 #
-#                   Copyright (c) 2016-2023 Wataru KUNINO https://bokunimo.net/
+#                   Copyright (c) 2016-2025 Wataru KUNINO https://bokunimo.net/
 ###############################################################################
 
 udp_port=1024                                           # CSVxUDP ポート番号

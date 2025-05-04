@@ -2,7 +2,7 @@
 ###############################################################################
 # ファイルの拡張子を変更します
 # 
-#                 Copyright (c) 2016-2023 Wataru KUNINO (https://bokunimo.net/)
+#                 Copyright (c) 2016-2025 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 
 echo "Usage: "${0}" file-ext-from file-ext-to"

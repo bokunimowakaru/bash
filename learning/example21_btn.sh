@@ -6,7 +6,7 @@
 #
 # 参考文献 raspi-gpio help
 #
-#                   Copyright (c) 2023-2024 Wataru KUNINO https://bokunimo.net/
+#                   Copyright (c) 2023-2025 Wataru KUNINO https://bokunimo.net/
 ###############################################################################
 
 udp_port=1024                                           # CSVxUDP ポート番号

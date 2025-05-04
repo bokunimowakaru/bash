@@ -7,7 +7,7 @@
 #
 # 参考文献 raspi-gpio help
 #
-#                   Copyright (c) 2023-2024 Wataru KUNINO https://bokunimo.net/
+#                   Copyright (c) 2023-2025 Wataru KUNINO https://bokunimo.net/
 ###############################################################################
 
 line_token="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # LINEで取得したTOKEN

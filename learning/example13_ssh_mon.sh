@@ -16,7 +16,7 @@
 # 手動実行：
 #    ./example13_ssh_mon.sh
 #
-#                 Copyright (c) 2023-2024 Wataru KUNINO (https://bokunimo.net/)
+#                 Copyright (c) 2023-2025 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 
 password="****************" # ユーザのパスワードを平文で記入します【危険あり】

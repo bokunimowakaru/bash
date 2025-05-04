@@ -3,7 +3,7 @@
 # 指定したフォルダ内とUSBメモリ内のファイルを比較し、新しいファイルに更新します
 # （同期をとる）。
 # 
-#                 Copyright (c) 2016-2023 Wataru KUNINO (https://bokunimo.net/)
+#                 Copyright (c) 2016-2025 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 
 echo "Usage: "${0}" [directory]"

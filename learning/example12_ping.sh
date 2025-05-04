@@ -5,7 +5,7 @@
 # maclist.txtにMACアドレスとデバイス名の対応表を保存しておくとgrepして表示する
 # 例： 00:11:22:33:44:55 Raspberry Pi 5
 # 
-#                 Copyright (c) 2016-2023 Wataru KUNINO (https://bokunimo.net/)
+#                 Copyright (c) 2016-2025 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 
 ip_regexp="^([0-9]*\.){3}[0-9]*"

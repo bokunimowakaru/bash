@@ -5,7 +5,7 @@
 # 送信先1：Ambient HTTP POST方式 (https://ambidata.io/)
 # 送信先2：LAN CSVxUDP方式 (https://bokunimo.net/iot/CSVxUDP/)
 #
-#                   Copyright (c) 2016-2023 Wataru KUNINO https://bokunimo.net/
+#                   Copyright (c) 2016-2025 Wataru KUNINO https://bokunimo.net/
 ###############################################################################
 
 channelId=100               #要設定                     # AmbientチャネルID

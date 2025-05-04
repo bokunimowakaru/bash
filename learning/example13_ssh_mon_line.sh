@@ -35,7 +35,7 @@
 #    または、/etc/rc.localに下記を追加する
 #    nohup /home/pi/bash/learning/example13_ssh_mon.sh &> /dev/null &
 #
-#                Copyright (c) 2023-2024 Wataru KUNINO (https://bokunimo.net/)
+#                Copyright (c) 2023-2025 Wataru KUNINO (https://bokunimo.net/)
 ###############################################################################
 
 # Messaging API用 Channel情報
