@@ -1,5 +1,5 @@
 title : テスト用ファイル
 descr : HTTP GET の動作確認に使用します
-state : 執筆中です
+state : GitHub Pages のWebサーバ稼働中
 url   : https://git.bokunimo.com/bash/
-date  : 2023/12/03
+date  : 2025/07/14
