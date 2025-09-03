@@ -1,4 +1,4 @@
-# bash: Bashスクリプトによるサンプル・プログラム集
+# bash: Bashスクリプト・サンプル・プログラム集
 Code Examples for Bash Script Learning
 
 Linuxやラズベリー・パイ用のBashサンプル・プログラム集です。
@@ -64,7 +64,7 @@ example06_temp.shなど、CPU温度センサを利用するプログラムがあ
 |Ubuntu temp1|file="/sys/class/hwmon/hwmon1/temp1_input" # 温度ファイル|
 |固定値 25℃  |file="temp0.txt" # 温度ファイル                          |
 
-表の最下行は、固定値「25000」が書かれたファイルtemp0.txtを用いる場合の設定例。
+表の最下行は、固定値「25000」が書かれたファイルtemp0.txtを用いる場合の設定例です。
 仮想環境などで温度センサの値が読み取れない場合の実験で使用してください。
 ファイルの内容を書き換えれば、他の温度値を模擬することも出来ます。
 
