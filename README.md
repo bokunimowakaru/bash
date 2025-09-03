@@ -1,7 +1,7 @@
-# bash: Bashスクリプト・サンプル・プログラム集
+# bash: Bashスクリプト/サンプル・プログラム集
 Code Examples for Bash Script Learning
 
-Linuxやラズベリー・パイ用のBashサンプル・プログラム集です。
+Bashスクリプトで書かれたLinuxやラズベリー・パイ用のサンプル・プログラム集です。
 
 ## ダウンロード
 
