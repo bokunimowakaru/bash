@@ -75,7 +75,7 @@ while [ $repeat -ne 0 ]; do
     elif [ $hour -eq 18 ]; then
         hour_unit="at sunset"
     else
-        hour_unit="at "${hour}"o'clock"
+        hour_unit="at "${hour}" o'clock"
     fi
     month=`date +"%_m"`
     if [ $month -ge 3 ] && [ $month -le 4 ]; then
