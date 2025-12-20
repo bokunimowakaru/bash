@@ -85,7 +85,9 @@ fi
     done
 ) &
 child_pid=$!
-trap "kill $child_pid" EXIT
+swap_pct=`cat /proc/sys/vm/swappiness`
+sudo sh -c "echo 10 > /proc/sys/vm/swappiness"  # SDへのスワップ率を10%に設定
+trap 'kill $child_pid; sudo sh -c "echo $swap_pct>/proc/sys/vm/swappiness"' EXIT
 
 # 永久ループ
 while true; do
