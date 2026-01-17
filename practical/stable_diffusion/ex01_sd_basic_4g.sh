@@ -2,16 +2,16 @@
 
 ###############################################################################
 # Automatic1111 Stable Diffusion WebUI のAPIを使って風景画像の生成指示を行う
-# [実用・カレンダー][風景][4GB RAM][メモリ計測]
+# [実用・カレンダー][風景][メモリ計測][4GB RAM]
 #
-# 詳細：https://bokunimo.net/blog/raspberry-pi/6228
+# 詳細：https://bokunimo.net/blog/raspberry-pi/6228/
 #
-#                                              Copyright (c) 2025 Wataru KUNINO
+#                                              Copyright (c) 2026 Wataru KUNINO
 ###############################################################################
 # 注意点
-# ・Stable Diffusion をCPUで実行するので、生成には5～6分の時間を要します。
-# ・約4.9～6.4GBのメモリーを使用します。
-#   メモリを節約する設定方法(Swap設定を含む)は当方ブログを確認ください。
+# ・CPUと仮想メモリーで実行するので、生成には9～10分の時間を要します。
+# ・設定方法(Swap設定を含む)は当方ブログを確認ください。
+#   https://bokunimo.net/blog/raspberry-pi/6228/
 # ・解像度は低めです。 width,height,stepsの値を増やすと高解像度になります。
 # ・JSONデータからBase64を抽出するのにjqコマンドを使用します。
 #   $ sudo apt install jq ⏎

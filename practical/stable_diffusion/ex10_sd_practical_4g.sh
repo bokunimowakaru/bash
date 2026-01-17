@@ -2,12 +2,17 @@
 
 ###############################################################################
 # Automatic1111 Stable Diffusion WebUI のAPIを使って人物画像の生成指示を行う
-# [実用・汎用版][人物]
+# [実用・汎用版][人物][メモリ計測][4GB RAM]
 # 1枚の画像生成に約20分を要します。
 #
-#                                              Copyright (c) 2025 Wataru KUNINO
+# 詳細：https://bokunimo.net/blog/raspberry-pi/6228/
+#
+#                                              Copyright (c) 2026 Wataru KUNINO
 ###############################################################################
 # 注意点
+# ・CPUと仮想メモリーで実行するので、生成には9～10分の時間を要します。
+# ・設定方法(Swap設定を含む)は当方ブログを確認ください。
+#   https://bokunimo.net/blog/raspberry-pi/6228/
 # ・モデルに「japaneseStyleRealistic_v20」を使用します。
 #   ダウンロード https://civitai.com/models/56287/japanese-style-realistic-jsr
 #   保存先 stable-diffusion-webui/models/Stable-diffusion
@@ -27,9 +32,9 @@ model="japaneseStyleRealistic_v20" # モデル名
 # ↑ 標準モデルを使用する場合は model="v1-5-pruned-emaonly" に変更してください
 sampler="DPM++ 2M"          # サンプラー方式（画像生成のアルゴリズム）
 scheduler="Karras"          # スケジューラー方式（ノイズ除去アルゴリズム）
-width=384                   # 画像解像度（幅）
-height=512                  # 画像解像度（高さ）
-steps=24                    # 生成ステップ数（多いほど高品質）
+width=256                   # 画像解像度（幅）
+height=384                  # 画像解像度（高さ）
+steps=20                    # 生成ステップ数（多いほど高品質）
 cfg_scale=7                 # プロンプトの忠実度（高いほどプロンプトに忠実）
 seed=-1                     # 乱数シード（数値:再現性確保,-1:ランダム）
 restore_faces="false"       # 遠景で人物が小さい場合の顔補正(GFPGAN/CodeFormer)
@@ -84,9 +89,7 @@ fi
     done
 ) &
 child_pid=$!
-swap_pct=`cat /proc/sys/vm/swappiness`
-sudo sh -c "echo 10 > /proc/sys/vm/swappiness"  # SDへのスワップ率を10%に設定
-trap 'kill $child_pid; sudo sh -c "echo $swap_pct>/proc/sys/vm/swappiness"' EXIT
+trap 'kill $child_pid' EXIT
 
 # 永久ループ
 while true; do
