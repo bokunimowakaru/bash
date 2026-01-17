@@ -78,9 +78,8 @@ fi
     rm -f memlog.csv
     while true; do
     echo -n `date -Iseconds`", " >> memlog.csv
-    ps -o rss=,command -C python --sort=-rss |grep launch.py |head -1 \
-        |cut -d" " -f1 >> memlog.csv
-        # awk '{print "メモリ使用量 = " int($1/1024+0.5) "MB"}'
+    ps -o vsz,rss,pss,uss,command -C python --sort=-rss |grep launch.py |head -1 \
+        |awk '{print $1",",$2",",$3",",$4}' >> memlog.csv
     sleep 2
     done
 ) &
@@ -118,13 +117,22 @@ while true; do
     )
     echo "終了しました 所要時間 $SECONDS 秒 (約 $(((SECONDS + 30) / 60)) 分)"
     echo -n "メモリ使用量: 最大 = "
+    awk -F, '{if($3>max){max=$3}}END{print int(max/1024+0.5) " MB"}' memlog.csv
+    echo -n "　　　　　　: 平均 = "
+    awk -F, '{sum+=$3; count++} END{print int(sum/count/1024+0.5)" MB"}' memlog.csv
+    echo -n "　　　　　　: ３σ =  "
+    awk -F, '{sum+=$3; sumsq+=$3*$3; count++} END{\
+        mean=sum/count; print int(3*sqrt(sumsq/count - mean*mean)/1024+0.5)" MB"\
+    }' memlog.csv
+    echo -n "メモリ確保量: 最大 = "
     awk -F, '{if($2>max){max=$2}}END{print int(max/1024+0.5) " MB"}' memlog.csv
-    echo -n "メモリ使用量: 平均 = "
+    echo -n "　　　　　　: 平均 = "
     awk -F, '{sum+=$2; count++} END{print int(sum/count/1024+0.5)" MB"}' memlog.csv
-    echo -n "メモリ使用量: ３σ =  "
+    echo -n "　　　　　　: ３σ =  "
     awk -F, '{sum+=$2; sumsq+=$2*$2; count++} END{\
         mean=sum/count; print int(3*sqrt(sumsq/count - mean*mean)/1024+0.5)" MB"\
     }' memlog.csv
+
     # HTTPリゾルトコードの確認
     http_code="${res:(-3)}"
     if [ "${http_code}" != "200" ]; then
