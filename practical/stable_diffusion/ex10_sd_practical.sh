@@ -45,7 +45,12 @@ repeat=-1                   # 生成回数(-1で永続)
 standby_time_min=1          # 連続生成間隔（分)
 
 # 画像生成用プロンプト
-humans=("a masculine man" "a woman" "a 20-year-old handsome guy" "a 20-year-old girl")
+humans=(
+    "a masculine man with short hair"
+    "a woman"
+    "a 20-year-old handsome guy with short hair"
+    "a 20-year-old girl"
+)
 scenes=("in a room" "on a sidewalk" "in a natural park")
 humans_num=${#humans[*]}
 scenes_num=${#scenes[*]}

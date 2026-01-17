@@ -34,7 +34,7 @@ sampler="DPM++ 2M"          # サンプラー方式（画像生成のアルゴ�
 scheduler="Karras"          # スケジューラー方式（ノイズ除去アルゴリズム）
 width=256                   # 画像解像度（幅）
 height=384                  # 画像解像度（高さ）
-steps=20                    # 生成ステップ数（多いほど高品質）
+steps=17                    # 生成ステップ数（多いほど高品質）
 cfg_scale=7                 # プロンプトの忠実度（高いほどプロンプトに忠実）
 seed=-1                     # 乱数シード（数値:再現性確保,-1:ランダム）
 restore_faces="false"       # 遠景で人物が小さい場合の顔補正(GFPGAN/CodeFormer)
@@ -50,7 +50,12 @@ repeat=-1                   # 生成回数(-1で永続)
 standby_time_min=1          # 連続生成間隔（分)
 
 # 画像生成用プロンプト
-humans=("a masculine man" "a woman" "a 20-year-old handsome guy" "a 20-year-old girl")
+humans=(
+    "a masculine man with short hair"
+    "a woman"
+    "a 20-year-old handsome guy with short hair"
+    "a 20-year-old girl"
+)
 scenes=("in a room" "on a sidewalk" "in a natural park")
 humans_num=${#humans[*]}
 scenes_num=${#scenes[*]}
