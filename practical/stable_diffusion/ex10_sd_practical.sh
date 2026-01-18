@@ -2,10 +2,10 @@
 
 ###############################################################################
 # Automatic1111 Stable Diffusion WebUI のAPIを使って人物画像の生成指示を行う
-# [実用・汎用版][人物]
-# 1枚の画像生成に約20分を要します。
+# [実用・汎用版][人物][メモリ計測]
+# 1枚の画像生成に約22分を要します。
 #
-#                                              Copyright (c) 2025 Wataru KUNINO
+#                                         Copyright (c) 2025-2026 Wataru KUNINO
 ###############################################################################
 # 注意点
 # ・モデルに「japaneseStyleRealistic_v20」を使用します。
@@ -42,30 +42,36 @@ api_url="127.0.0.1:7860"    # アクセス先URL
 app_name=`basename "$0"`    # 実行ファイル名を取得
 output_file_pfx=${app_name:0:7} # 出力ファイル用の接頭語を作成
 repeat=-1                   # 生成回数(-1で永続)
-standby_time_min=1          # 連続生成間隔（分)
+interval_min=24             # 連続生成間隔(分), 0=間隔を開けずに連続生成
+nationality="Japanese"      # 国籍
 
 # 画像生成用プロンプト
 humans=(
-    "a masculine man with short hair"
-    "a woman"
-    "a 20-year-old handsome guy with short hair"
-    "a 20-year-old girl"
+    "a ${nationality} masculine man with short hair, no makeup"
+    "a ${nationality} woman"
+    "a ${nationality} 20-year-old handsome guy with short hair, no makeup"
+    "a ${nationality} 20-year-old girl"
 )
-scenes=("in a room" "on a sidewalk" "in a natural park")
+clothes=("buisiness suit" "casual suit" "concierge uniform")
+scenes=("in a modern apartment" "on a sidewalk" "in a office")
 humans_num=${#humans[*]}
+clothes_num=${#clothes[*]}
 scenes_num=${#scenes[*]}
 
 get_prompt(){
-    echo -n "A highly detailed, realistic, medium shot portrait photograph of "
-    echo -n "(${humans[$(( $RANDOM % humans_num ))]} "
-    echo -n "${scenes[$(( $RANDOM % scenes_num ))]}), "
-    echo -n "natural expression of a smile, "
-    echo -n "clear facial features, upper half of body, casual attire, "
-    echo -n "professional DSLR photography, ultra high resolution. "
+    echo -n "A medium shot portrait photograph of "
+    echo -n "(${humans[$(( $RANDOM % humans_num ))]}, centered composition, "
+    echo -n "wears ${clothes[$(( $RANDOM % clothes_num ))]}), "
+    echo -n "natural expression of a smile, facing camera, "
+    echo -n "clear facial features, "
+    echo -n "${scenes[$(( $RANDOM % scenes_num ))]}, "
+    echo -n "professional DSLR photography. "
 }
-negative_prompt="low quality, blurry, deformed face, extra limbs, bad anatomy, "
-negative_prompt+="unrealistic eyes, distorted hands, nsfw, cropped face, "
-negative_prompt+="cartoon, painting, sketch, 3d render, monochrome. "
+negative_prompt="low quality, blurry, cropped face, "
+negative_prompt+="deformed face, unrealistic eyes, close-up, extreme zoom, "
+negative_prompt+="bad anatomy, extra arms, fingers, "
+negative_prompt+="nsfw, voluptuous, kimono, japanese clothes, "
+negative_prompt+="cartoon, painting, sketch, monochrome. "
 
 # モデルの設定
 echo "モデル設定中 =" $model
@@ -169,8 +175,11 @@ while true; do
         echo "終了します"
         exit 0
     fi
-    echo "次回の実行を待機中("${standby_time_min}"分)..."
-    sleep $((standby_time_min * 60))
+    time_d=$(( interval_min * 60 - SECONDS ))
+    if [ time_d -gt 0 ]; then
+        echo "次回の実行を待機中("${time_d}"秒)..."
+        sleep $((time_d))
+    fi
 done
 
 ###############################################################################

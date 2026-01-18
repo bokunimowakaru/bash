@@ -29,7 +29,7 @@ api_url="127.0.0.1:7860"    # アクセス先URL
 app_name=`basename "$0"`    # 実行ファイル名を取得
 output_file_pfx=${app_name:0:7} # 出力ファイル用の接頭語を作成
 repeat=-1                   # 生成回数(-1で永続)
-standby_time_min=1          # 連続生成間隔（分)
+interval_min=10             # 連続生成間隔(分), 0=間隔を開けずに連続生成
 
 # 情景画像生成用(プロンプトの一部)
 LC_ALL=en_US.UTF8           # ロケール設定を米語に設定(英文プロンプト生成用)
@@ -137,8 +137,11 @@ while [ $repeat -ne 0 ]; do
     fi
     echo "$image_base64" | base64 --decode > "$output_file"
     echo "生成した画像を保存しました $output_file"
-    echo "次回の実行を待機中("${standby_time_min}"分)..."
-    sleep $((standby_time_min * 60))
+    time_d=$(( interval_min * 60 - SECONDS ))
+    if [ time_d -gt 0 ]; then
+        echo "次回の実行を待機中("${time_d}"秒)..."
+        sleep $((time_d))
+    fi
 done
 
 ###############################################################################

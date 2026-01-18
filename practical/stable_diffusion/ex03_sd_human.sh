@@ -3,7 +3,7 @@
 ###############################################################################
 # Automatic1111 Stable Diffusion WebUI のAPIを使って人物画像の生成指示を行う
 # [実用・汎用版][人物]
-# 1枚の画像生成に約20分を要します。
+# 1枚の画像生成に約22分を要します。
 #
 #                                              Copyright (c) 2025 Wataru KUNINO
 ###############################################################################
@@ -42,7 +42,7 @@ api_url="127.0.0.1:7860"    # アクセス先URL
 app_name=`basename "$0"`    # 実行ファイル名を取得
 output_file_pfx=${app_name:0:7} # 出力ファイル用の接頭語を作成
 repeat=-1                   # 生成回数(-1で永続)
-standby_time_min=1          # 連続生成間隔（分)
+interval_min=24             # 連続生成間隔(分), 0=間隔を開けずに連続生成
 
 # 画像生成用プロンプト
 humans=("a man" "a woman" "a 20 year old guy" "a 20 year old girl")
@@ -150,8 +150,11 @@ while true; do
         echo "終了します"
         exit 0
     fi
-    echo "次回の実行を待機中("${standby_time_min}"分)..."
-    sleep $((standby_time_min * 60))
+    time_d=$(( interval_min * 60 - SECONDS ))
+    if [ time_d -gt 0 ]; then
+        echo "次回の実行を待機中("${time_d}"秒)..."
+        sleep $((time_d))
+    fi
 done
 
 ###############################################################################
