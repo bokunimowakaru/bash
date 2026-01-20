@@ -3,16 +3,15 @@
 ###############################################################################
 # Automatic1111 Stable Diffusion WebUI のAPIを使って人物画像の生成指示を行う
 # [実用・汎用版][人物][メモリ計測][4GB RAM]
-# 1枚の画像生成に約22分を要します。
+# 1枚の画像生成に約20分を要します。
 #
-# 詳細：https://bokunimo.net/blog/raspberry-pi/6228/
+# 詳細情報
+# 　人物生成 = https://bokunimo.net/blog/raspberry-pi/6400/
+# 　RAM 4GB  = https://bokunimo.net/blog/raspberry-pi/6228/
 #
 #                                         Copyright (c) 2025-2026 Wataru KUNINO
 ###############################################################################
 # 注意点
-# ・CPUと仮想メモリーで実行するので、生成には9～10分の時間を要します。
-# ・設定方法(Swap設定を含む)は当方ブログを確認ください。
-#   https://bokunimo.net/blog/raspberry-pi/6228/
 # ・モデルに「japaneseStyleRealistic_v20」を使用します。
 #   ダウンロード https://civitai.com/models/56287/japanese-style-realistic-jsr
 #   保存先 stable-diffusion-webui/models/Stable-diffusion
@@ -34,7 +33,7 @@ sampler="DPM++ 2M"          # サンプラー方式（画像生成のアルゴ�
 scheduler="Karras"          # スケジューラー方式（ノイズ除去アルゴリズム）
 width=256                   # 画像解像度（幅）
 height=344                  # 画像解像度（高さ）
-steps=24                    # 生成ステップ数（多いほど高品質）
+steps=20                    # 生成ステップ数（多いほど高品質）
 cfg_scale=7                 # プロンプトの忠実度（高いほどプロンプトに忠実）
 seed=-1                     # 乱数シード（数値:再現性確保,-1:ランダム）
 restore_faces="false"       # 遠景で人物が小さい場合の顔補正(GFPGAN/CodeFormer)
@@ -47,7 +46,7 @@ api_url="127.0.0.1:7860"    # アクセス先URL
 app_name=`basename "$0"`    # 実行ファイル名を取得
 output_file_pfx=${app_name:0:7} # 出力ファイル用の接頭語を作成
 repeat=-1                   # 生成回数(-1で永続)
-interval_min=22             # 連続生成間隔(分), 0=間隔を開けずに連続生成
+interval_min=29             # 連続生成間隔(分), 0=間隔を開けずに連続生成
 nationality="Japanese"      # 国籍
 
 # 画像生成用プロンプト
@@ -64,19 +63,21 @@ clothes_num=${#clothes[*]}
 scenes_num=${#scenes[*]}
 
 get_prompt(){
-    echo -n "A medium shot portrait photograph of "
-    echo -n "(${humans[$(( $RANDOM % humans_num ))]}, centered composition, "
+    echo -n "An upper-body portrait photograph of "
+    echo -n "(${humans[$(( $RANDOM % humans_num ))]}, "
     echo -n "wears ${clothes[$(( $RANDOM % clothes_num ))]}), "
-    echo -n "natural expression of a smile, facing camera, "
-    echo -n "clear facial features, "
+    echo -n "natural expression of a smile, realistic eyes, facing camera, "
+    echo -n "clear facial features, centered composition, "
     echo -n "${scenes[$(( $RANDOM % scenes_num ))]}, "
     echo -n "professional DSLR photography. "
 }
-negative_prompt="low quality, blurry, cropped face, "
-negative_prompt+="deformed face, unrealistic eyes, close-up, extreme zoom, "
-negative_prompt+="bad anatomy, extra arms, fingers, "
-negative_prompt+="nsfw, voluptuous, kimono, japanese clothes, "
-negative_prompt+="cartoon, painting, sketch, monochrome. "
+negative_prompt="low quality, blurry, "
+# negative_prompt+="cropped face, close-up, extreme zoom, "
+# negative_prompt+="deformed face, unrealistic eyes, 
+# negative_prompt+="bad anatomy, extra arms, bad fingers, "
+# negative_prompt+="cartoon, painting, sketch, "
+negative_prompt+="nsfw, voluptuous, "
+negative_prompt+="kimono, japanese clothes, monochrome. "
 
 # モデルの設定
 echo "モデル設定中 =" $model
@@ -170,6 +171,11 @@ while true; do
     fi
     echo "$image_base64" | base64 --decode > "$output_file"
     echo "生成した画像を保存しました $output_file"
+    # ExifToolがインストールされていた場合に生成時間をEXIFに追記する
+    which exiftool
+    if [ $? -eq 0 ]; then
+        exiftool -ExposureTime=${SECONDS} "$output_file"
+    fi
     repeat=$((repeat-1))
     if [ $repeat -le -1 ]; then
         repeat=-1           # 負の値の時に永久ループ

@@ -137,6 +137,11 @@ while [ $repeat -ne 0 ]; do
     fi
     echo "$image_base64" | base64 --decode > "$output_file"
     echo "生成した画像を保存しました $output_file"
+    # ExifToolがインストールされていた場合に生成時間をEXIFに追記する
+    which exiftool
+    if [ $? -eq 0 ]; then
+        exiftool -ExposureTime=${SECONDS} "$output_file"
+    fi
     time_d=$(( interval_min * 60 - SECONDS ))
     if [ $time_d -gt 0 ]; then
         echo "次回の実行を待機中("${time_d}"秒)..."
