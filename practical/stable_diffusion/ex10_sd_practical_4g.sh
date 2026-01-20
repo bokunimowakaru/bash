@@ -174,7 +174,7 @@ while true; do
     # ExifToolがインストールされていた場合に生成時間をEXIFに追記する
     which exiftool
     if [ $? -eq 0 ]; then
-        exiftool -ExposureTime=${SECONDS} "$output_file"
+        exiftool -ExposureTime=${SECONDS} -overwrite_original "$output_file"
     fi
     repeat=$((repeat-1))
     if [ $repeat -le -1 ]; then
