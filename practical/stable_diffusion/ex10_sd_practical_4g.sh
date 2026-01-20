@@ -46,7 +46,7 @@ api_url="127.0.0.1:7860"    # アクセス先URL
 app_name=`basename "$0"`    # 実行ファイル名を取得
 output_file_pfx=${app_name:0:7} # 出力ファイル用の接頭語を作成
 repeat=-1                   # 生成回数(-1で永続)
-interval_min=29             # 連続生成間隔(分), 0=間隔を開けずに連続生成
+interval_min=20             # 連続生成間隔(分), 0=間隔を開けずに連続生成
 nationality="Japanese"      # 国籍
 
 # 画像生成用プロンプト
