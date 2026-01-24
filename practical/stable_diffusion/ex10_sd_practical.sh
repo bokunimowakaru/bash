@@ -30,10 +30,10 @@ model="japaneseStyleRealistic_v20" # モデル名
 # ↑ 標準モデルを使用する場合は model="v1-5-pruned-emaonly" に変更してください
 sampler="DPM++ 2M"          # サンプラー方式（画像生成のアルゴリズム）
 scheduler="Karras"          # スケジューラー方式（ノイズ除去アルゴリズム）
-width=384                   # 画像解像度（幅）
-height=512                  # 画像解像度（高さ）
+width=440                   # 画像解像度（幅）
+height=440                  # 画像解像度（高さ）
 steps=20                    # 生成ステップ数（多いほど高品質）
-cfg_scale=7                 # プロンプトの忠実度（高いほどプロンプトに忠実）
+cfg_scale=6                 # プロンプトの忠実度（高いほどプロンプトに忠実）
 seed=-1                     # 乱数シード（数値:再現性確保,-1:ランダム）
 restore_faces="false"       # 遠景で人物が小さい場合の顔補正(GFPGAN/CodeFormer)
 tiling="false"              # 壁紙などのパターン状のタイル画像の補正
@@ -45,7 +45,7 @@ api_url="127.0.0.1:7860"    # アクセス先URL
 app_name=`basename "$0"`    # 実行ファイル名を取得
 output_file_pfx=${app_name:0:7} # 出力ファイル用の接頭語を作成
 repeat=-1                   # 生成回数(-1で永続)
-interval_min=20             # 連続生成間隔(分), 0=間隔を開けずに連続生成
+interval_min=0              # 連続生成間隔(分), 0=間隔を開けずに連続生成
 nationality="Japanese"      # 国籍
 
 # 画像生成用プロンプト
@@ -196,3 +196,8 @@ done
 # 参考文献 API資料
 # http://localhost:7860/docs#/default/text2imgapi_sdapi_v1_txt2img_post
 ###############################################################################
+# 便利コマンド 生成時間をファイルに保存し、最大値、最小値、平均値を求める
+#   exiftool *.png|grep "Shutter Speed" | awk '{print $4 }' > time.csv
+#   awk -F, '{if($1>max){max=$1}}END{print "max " max " 秒 (約 " int(max/60+0.5) "分)"}' time.csv
+#   awk -F, 'BEGIN{min=9999}{if($1<min){min=$1}}END{print "min " min " 秒 (約 " int(min/60+0.5) "分)"}' time.csv
+#   awk -F, '{sum+=$1; count++} END{avr=int(sum/count+0.5); print "avr " avr " 秒(約 " int(avr/60+0.5) "分)"}' time.csv
