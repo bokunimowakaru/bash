@@ -58,3 +58,7 @@ sync/
 *.csv
 *.BAK
 
+# Stable Diffusion
+practical/stable_diffusion/*.png
+practical/stable_diffusion/*.json
+practical/stable_diffusion/*.csv
