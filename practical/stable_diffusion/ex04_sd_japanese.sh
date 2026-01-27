@@ -2,8 +2,8 @@
 
 ###############################################################################
 # Automatic1111 Stable Diffusion WebUI のAPIを使って人物画像の生成指示を行う
-# [実用・汎用版][人物][メモリ計測]
-# 1枚の画像生成に約20分を要します。
+# [実用・汎用版][人物][単一プロンプト][メモリ計測]
+# 1枚の画像生成に約22分を要します。
 #
 # 詳細情報
 # 　人物生成 = https://bokunimo.net/blog/raspberry-pi/6400/
@@ -16,7 +16,7 @@
 #   保存先 stable-diffusion-webui/models/Stable-diffusion
 #   ライセンス CreativeML Open RAIL-M, ※Beautiful Realistic Asians 融合モデル
 # ・Stable Diffusion をCPUで実行するので、生成には約22分の時間を要します。
-# ・約5.1GB～8.1GBのメモリーを使用します。8GBモデルでは節約が必要です。
+# ・約5.3GB～8.6GBのメモリーを使用します。8GBモデルでは節約が必要です。
 #   メモリーを節約する設定方法(Swap設定を含む)は当方ブログを確認ください。
 # ・解像度は低めです。 width,heightの値を増やすと高解像度になります。
 # ・JSONデータからBase64を抽出するのにjqコマンドを使用します。
@@ -33,8 +33,8 @@ scheduler="Karras"          # スケジューラー方式（ノイズ除去ア�
 width=512                   # 画像解像度（幅）
 height=512                  # 画像解像度（高さ）
 steps=20                    # 生成ステップ数（多いほど高品質）
-cfg_scale=6                 # プロンプトの忠実度（高いほどプロンプトに忠実）
-seed=-1                     # 乱数シード（数値:再現性確保,-1:ランダム）
+cfg_scale=7                 # プロンプトの忠実度（高いほどプロンプトに忠実）
+seed=1                      # 乱数シードの初期値（1ずつインクリメントする）
 restore_faces="false"       # 遠景で人物が小さい場合の顔補正(GFPGAN/CodeFormer)
 tiling="false"              # 壁紙などのパターン状のタイル画像の補正
 clip_skip=1                 # CLIP スキップ（1～2）実写風の画像では1
@@ -46,53 +46,9 @@ app_name=`basename "$0"`    # 実行ファイル名を取得
 output_file_pfx=${app_name:0:7} # 出力ファイル用の接頭語を作成
 repeat=-1                   # 生成回数(-1で永続)
 interval_min=0              # 連続生成間隔(分), 0=間隔を開けずに連続生成
-nationality="Japanese"      # 国籍
 
-# 画像生成用プロンプト
-humans=(
-    "a ${nationality} masculine man with short hair, no makeup"
-    "a ${nationality} woman"
-    "a ${nationality} 20-year-old handsome guy with short hair, no makeup"
-    "a ${nationality} 20-year-old girl"
-    "a ${nationality} adult boy, with short hair, without makeup"
-    "a ${nationality} women's university student, dark brown hair"
-)
-clothes=(
-    "buisiness suit"
-    "light business attire"
-    "concierge uniform"
-    "casual suit"
-    "fashionable clothes"
-    "casual clothes"
-)
-scenes=(
-    "in a modern apartment"
-    "in a office"
-    "at a neutral view window side"
-    "on a sidewalk"
-    "in a sightseeng spot"
-    "in a shipping mall"
-)
-humans_num=${#humans[*]}
-clothes_num=${#clothes[*]}
-scenes_num=${#scenes[*]}
-
-get_prompt(){
-    echo -n "An upper-body portrait photograph of "
-    echo -n "(${humans[$(( $RANDOM % humans_num ))]}, "
-    echo -n "wears ${clothes[$(( $RANDOM % clothes_num ))]}), "
-    echo -n "natural expression of a smile, realistic eyes, facing camera, "
-    echo -n "clear facial features, centered composition, "
-    echo -n "${scenes[$(( $RANDOM % scenes_num ))]}, "
-    echo -n "professional DSLR photography. "
-}
-negative_prompt="low quality, blurry, "
-# negative_prompt+="cropped face, close-up, extreme zoom, "
-# negative_prompt+="deformed face, unrealistic eyes, 
-# negative_prompt+="bad anatomy, extra arms, bad fingers, "
-# negative_prompt+="cartoon, painting, sketch, "
-negative_prompt+="nsfw, voluptuous, "
-negative_prompt+="kimono, japanese clothes, monochrome. "
+prompt="A realistic upper-body portrait of Japanese, wears fashionable clothes, in a modern apartment. "
+negative_prompt="low quality, blurry, nsfw, traditional Japanese clothes. "
 
 # モデルの設定
 echo "モデル設定中 =" $model
@@ -122,7 +78,6 @@ trap 'kill $child_pid; sudo sh -c "echo $swap_pct>/proc/sys/vm/swappiness"' EXIT
 
 # 永久ループ
 while true; do
-    prompt=`get_prompt`
     echo -e "Prompt: \n"${prompt}
     echo "Stable Diffusion API: 画像生成中..." `date +"%H:%M:%S"`
     time_start=`date +%s`
@@ -207,6 +162,9 @@ while true; do
     if [ $time_d -gt 0 ]; then
         echo "次回の実行を待機中("${time_d}"秒)..."
         sleep $((time_d))
+    fi
+    if [ $seed -ge 0 ]; then
+        seed=$((seed+1))
     fi
 done
 

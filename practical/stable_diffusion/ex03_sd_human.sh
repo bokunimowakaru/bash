@@ -42,7 +42,6 @@ api_url="127.0.0.1:7860"    # アクセス先URL
 app_name=`basename "$0"`    # 実行ファイル名を取得
 output_file_pfx=${app_name:0:7} # 出力ファイル用の接頭語を作成
 repeat=-1                   # 生成回数(-1で永続)
-interval_min=22             # 連続生成間隔(分), 0=間隔を開けずに連続生成
 
 # 画像生成用プロンプト
 humans=("a man" "a woman" "a 20 year old guy" "a 20 year old girl")
@@ -102,22 +101,6 @@ while true; do
           }"
     )
     echo "終了しました 所要時間 $SECONDS 秒 (約 $(((SECONDS + 30) / 60)) 分)"
-    echo -n "メモリ使用量: 最大 = "
-    awk -F, '{if($3>max){max=$3}}END{print int(max/1024+0.5) " MB"}' memlog.csv
-    echo -n "　　　　　　: 平均 = "
-    awk -F, '{sum+=$3; count++} END{print int(sum/count/1024+0.5)" MB"}' memlog.csv
-    echo -n "　　　　　　: ３σ =  "
-    awk -F, '{sum+=$3; sumsq+=$3*$3; count++} END{\
-        mean=sum/count; print int(3*sqrt(sumsq/count - mean*mean)/1024+0.5)" MB"\
-    }' memlog.csv
-    echo -n "メモリ確保量: 最大 = "
-    awk -F, '{if($2>max){max=$2}}END{print int(max/1024+0.5) " MB"}' memlog.csv
-    echo -n "　　　　　　: 平均 = "
-    awk -F, '{sum+=$2; count++} END{print int(sum/count/1024+0.5)" MB"}' memlog.csv
-    echo -n "　　　　　　: ３σ =  "
-    awk -F, '{sum+=$2; sumsq+=$2*$2; count++} END{\
-        mean=sum/count; print int(3*sqrt(sumsq/count - mean*mean)/1024+0.5)" MB"\
-    }' memlog.csv
 
     # HTTPリゾルトコードの確認
     http_code="${res:(-3)}"
@@ -155,11 +138,7 @@ while true; do
         echo "終了します"
         exit 0
     fi
-    time_d=$(( interval_min * 60 - SECONDS ))
-    if [ $time_d -gt 0 ]; then
-        echo "次回の実行を待機中("${time_d}"秒)..."
-        sleep $((time_d))
-    fi
+    sleep 10
 done
 
 ###############################################################################

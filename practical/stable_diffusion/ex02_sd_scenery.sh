@@ -97,7 +97,8 @@ while [ $repeat -ne 0 ]; do
     prompt+="balanced cinematic composition with depth of field, natural colors, "
     prompt+="wide-angle view, high resolution, realistic photo style. "
     echo -e "Prompt: \n"${prompt}
-    echo "Stable Diffusion API: 画像生成中..." `date +"%H:%M:%S"`; SECONDS=0
+    echo "Stable Diffusion API: 画像生成中..." `date +"%H:%M:%S"`
+    time_start=`date +%s`
     output_file=${output_file_pfx}"_"`date +"%2m_%H%M"`".png"
     res=$(curl -s -w "%{http_code}" -o res.json \
       -X POST "http://${api_url}/sdapi/v1/txt2img" \
@@ -113,7 +114,8 @@ while [ $repeat -ne 0 ]; do
             \"seed\": $seed
           }"
     )
-    echo "終了しました 所要時間 $SECONDS 秒 (約 $(((SECONDS + 30) / 60)) 分)"
+    time=$((`date +%s` - time_start))
+    echo "終了しました 所要時間 $time 秒 (約 $(((time + 30) / 60)) 分)"
     # HTTPリゾルトコードの確認
     http_code="${res:(-3)}"
     if [ "${http_code}" != "200" ]; then
@@ -140,9 +142,9 @@ while [ $repeat -ne 0 ]; do
     # ExifToolがインストールされていた場合に生成時間をEXIFに追記する
     which exiftool
     if [ $? -eq 0 ]; then
-        exiftool -ExposureTime=${SECONDS} -overwrite_original "$output_file"
+        exiftool -ExposureTime=${time} -overwrite_original "$output_file"
     fi
-    time_d=$(( interval_min * 60 - SECONDS ))
+    time_d=$(( interval_min * 60 - time ))
     if [ $time_d -gt 0 ]; then
         echo "次回の実行を待機中("${time_d}"秒)..."
         sleep $((time_d))
