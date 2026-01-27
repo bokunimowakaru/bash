@@ -4,6 +4,7 @@
 # Automatic1111 Stable Diffusion WebUI のAPIを使って人物画像の生成指示を行う
 # [実用・汎用版][人物][単一プロンプト][メモリ計測]
 # 1枚の画像生成に約22分を要します。
+# width=440, height=440に変更すると約18分に短縮できます。
 #
 # 詳細情報
 # 　人物生成 = https://bokunimo.net/blog/raspberry-pi/6400/
