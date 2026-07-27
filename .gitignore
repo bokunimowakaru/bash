@@ -57,6 +57,9 @@ sync/
 *.log
 *.csv
 *.BAK
+learning/cam.*
+learning/chime.*
+media/music/*.flac
 
 # Stable Diffusion
 practical/stable_diffusion/*.png
