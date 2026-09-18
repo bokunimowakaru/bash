@@ -128,7 +128,7 @@ while true; do
     fi
     # LLM 応答を表示する ######################################################
     echo "LLM 応答 >" "${response}"
-    echo "$(( $SECONDS - $time)), ${response}" >> ex04_llm_temperature_v3.csv
+    #echo "$(( $SECONDS - $time)), ${response}" >> ex04_llm_temperature_v3.csv
     echo "--------------------------------------------------------------------"
 done
 
