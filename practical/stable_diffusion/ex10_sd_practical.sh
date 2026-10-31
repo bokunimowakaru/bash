@@ -31,7 +31,7 @@ echo
 model="japaneseStyleRealistic_v20" # モデル名
 sampler="DPM++ 2M"              # サンプラー方式（画像生成のアルゴリズム）
 scheduler="Karras"              # スケジューラー方式（ノイズ除去アルゴリズム）
-aspect="1:1"
+aspect="1:1"                    # 生成画像のアスペクト比 1:1, 1:2, 2:3, 9:16
 api_url="127.0.0.1:7860"        # アクセス先URL
 app_name=`basename "$0"`        # 実行ファイル名を取得
 output_dir=`pwd`                # 出力先のディレクトリ
@@ -302,6 +302,7 @@ i=0; while true; do
             \"s_noise\": \"$s_noise\"
           }"
     )
+    echo
     echo "終了しました 所要時間 $SECONDS 秒 (約 $(((SECONDS + 30) / 60)) 分)"
     u_max=`awk -F, '{if($3>max){max=$3}}END{print int(max/1024+0.5) " MB"}' memlog.csv`
     u_avr=`awk -F, '{sum+=$3; count++} END{print int(sum/count/1024+0.5)" MB"}' memlog.csv`
@@ -313,12 +314,12 @@ i=0; while true; do
     s_std=`awk -F, '{sum+=$2; sumsq+=$2*$2; count++} END{\
         mean=sum/count; print int(3*sqrt(sumsq/count - mean*mean)/1024+0.5)" MB"\
     }' memlog.csv`
-    echo -n "メモリ使用量: 最大 =" ${u_max}
-    echo -n "　　　　　　: 平均 =" ${u_avr}
-    echo -n "　　　　　　: ３σ = " ${u_std}
-    echo -n "メモリ確保量: 最大 =" ${s_max}
-    echo -n "　　　　　　: 平均 =" ${s_avr}
-    echo -n "　　　　　　: ３σ = " ${s_std}
+    echo "メモリ使用量: 最大 =" ${u_max}
+    echo "　　　　　　: 平均 =" ${u_avr}
+    echo "　　　　　　: ３σ = " ${u_std}
+    echo "メモリ確保量: 最大 =" ${s_max}
+    echo "　　　　　　: 平均 =" ${s_avr}
+    echo "　　　　　　: ３σ = " ${s_std}
     # HTTPリゾルトコードの確認
     http_code="${res:(-3)}"
     if [ "${http_code}" != "200" ]; then
