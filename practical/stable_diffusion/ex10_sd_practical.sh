@@ -276,7 +276,7 @@ echo "永久ループ 画像生成の繰り返し処理を実行中 (PID: $MY_PI
 i=0; while true; do
     prompt=`get_prompt`
     #prompt="${prompts[i]}"
-    seed=${RANDOM}
+    seed=$(( RANDOM % 63356 ))
     echo -e "Prompt: \n"${prompt}
     echo "Stable Diffusion API: 画像生成中..." `date +"%H:%M:%S"`; SECONDS=0
     #output_file=${output_file_pfx}"_"`date +"%2d_%H%M"`".png"
