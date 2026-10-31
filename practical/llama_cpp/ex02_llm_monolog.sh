@@ -2,7 +2,7 @@
 
 ###############################################################################
 # Meta社 llama.cpp と Alibaba Cloud社 Qwen2.5 でオンプレ/ローカルLLMの実験
-# ex02_llm_monolog.sh
+# ex02_llm_monolog.sh 独り言をつぶやく
 #
 #                                              Copyright (c) 2026 Wataru KUNINO
 ###############################################################################
@@ -44,7 +44,7 @@ llama_opts+="--ctx-size 1024 "      # 総文脈トークン長を制限(0=モデ
 
 # llama.cpp と Qwen2.5 の存在を確認する #######################################
 if [ ! -x "${llama_cli}" ]; then
-    echo "エラー: llama-cli が見つかりません: ${llama_cli}"
+    echo "エラー: llama-completion が見つかりません: ${llama_cli}"
     exit 1
 fi
 if [ ! -f "${model_path}" ]; then
@@ -57,15 +57,12 @@ output=`"${llama_cli}" -m "${model_path}" --prompt "${prompt}" ${llama_opts}`
 exit_code=$?
 echo "LLM 出力 >" "${output}"
 if [ $exit_code -ne 0 ]; then
-    echo "ERROR: llama-cli が異常終了しました (exit code: $exit_code)"
+    echo "ERROR: llama-completion が異常終了しました (exit code: $exit_code)"
     exit 1
 fi
 
 # JSON部を抽出 ################################################################
-#json_text=`echo "${output}" | sed -n '/^[. ]*{/,/^[. ]*}/p'`
-#json_only=$(echo "$json_text" | sed -n '/^[[:space:]]*\([A-Za-z0-9_]\+\)\?[[:space:]]*{/,/^[[:space:]]*}/p')
-
-json_text=`echo "${output}"| sed -n '/^[ :]*\([A-Za-z]\+\)\? *{/,/^[ ]*}/p'`
+json_text=`echo "${output}"| sed -n '/^[ :]*\([A-Za-z:]\+\)\? *{/,/^[ ]*}/p'`
 echo "LLM JSON >" "${json_text}"
 if [ -z "${json_text}" ]; then
     echo "ERROR: JSON 応答が見つかりませんでした"
@@ -86,10 +83,10 @@ echo "LLM 応答 >" "${response}"
 exit 0
 
 ###############################################################################
-# 実行結果の例
-# ------------------------------------------------------------------------
-# pi@raspberrypi:~/bash/practical/llama_cpp $ ./ex02_llm_monolog.sh
+# 実行結果の例 ご注意:1回目の実行には1～2分を要します(モデルの読み込みのため)
 ###############################################################################
+# pi@raspberrypi:~/bash/practical/llama_cpp $ ./ex02_llm_monolog.sh
+# ------------------------------------------------------------------------
 # ---- 28 秒 -------------------------------------------------------------
 # LLM 応答 > 今日の天気が良かったね。
 # ---- 29 秒 -------------------------------------------------------------
